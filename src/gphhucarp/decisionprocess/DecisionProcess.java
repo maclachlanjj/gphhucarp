@@ -140,13 +140,6 @@ public abstract class DecisionProcess {
 
 //        double start = System.currentTimeMillis();
 
-        if(this.routingPolicy instanceof VehicleEvaluator_RoutingPolicy) { // a dirty way of doing it.
-            VehicleEvaluator_RoutingPolicy policy = ((VehicleEvaluator_RoutingPolicy) this.routingPolicy);
-            policy.updateMatrix(state.getUnassignedTasks(), this);
-        }
-
-//        System.out.println("out of initial loop");
-
         // trigger the events.
         while (!eventQueue.isEmpty()) {
             DecisionProcessEvent event = eventQueue.poll();

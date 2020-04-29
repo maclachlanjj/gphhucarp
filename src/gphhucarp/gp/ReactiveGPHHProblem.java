@@ -97,16 +97,24 @@ public class ReactiveGPHHProblem extends GPProblem implements SimpleProblemForm 
     }
 
     public GPRoutingPolicy_frame[] buildRoutingPolicies(List<String> expressions){
+        int numTrees = expressions.size();
         boolean hasSecondaryPolicy = secondaryPrototypePolicy == null ? false : true;
 
         GPRoutingPolicy_frame[] res = new GPRoutingPolicy_frame[hasSecondaryPolicy ? 2 : 1];
 
-        GPTree[] trees = new GPTree[hasSecondaryPolicy ? 2 : 1];
-        trees[0] = LispUtils.parseExpression(expressions.get(0), UCARPPrimitiveSet.wholePrimitiveSet());
-        if(hasSecondaryPolicy) trees[1] = LispUtils.parseExpression(expressions.get(1), UCARPPrimitiveSet.wholePrimitiveSet());
+        GPTree[] trees = new GPTree[numTrees];
 
-        res[0] = prototypePolicy.newTree(poolFilter, trees);
-        if(hasSecondaryPolicy) res[1] = secondaryPrototypePolicy.newTree(poolFilter, trees);
+        for(int i = 0; i < numTrees; i++)
+            trees[i] = LispUtils.parseExpression(expressions.get(i), UCARPPrimitiveSet.wholePrimitiveSet());
+
+        if(hasSecondaryPolicy){
+            // e.g. if the first policy is Rollout and the second is standard GP
+            res[0] = prototypePolicy.newTree(poolFilter, new GPTree[]{trees[0]});
+            res[1] = secondaryPrototypePolicy.newTree(poolFilter, new GPTree[]{trees[1]});
+        } else {
+            // e.g. both are GP
+            res[0] = prototypePolicy.newTree(poolFilter, trees);
+        }
 
         return res;
     }

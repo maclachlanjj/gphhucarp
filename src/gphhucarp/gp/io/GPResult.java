@@ -204,10 +204,12 @@ public class GPResult {
                         expression = LispUtils.simplifyExpression(expression);
                         result.addExpression(expression); currExpressions.add(expression);
                         next = br.readLine();
+                        if(next.length() == 0) break;
                     }
 
                     RoutingPolicy routingPolicy;
 
+                    // currently not returning correctly.
                     RoutingPolicy[] policies = prob.buildRoutingPolicies(currExpressions);
 
                     routingPolicy = policies[0];
@@ -233,6 +235,8 @@ public class GPResult {
 //                        routingPolicy = new GPRoutingPolicy(prob.getPoolFilter(),
 //                                LispUtils.parseExpression(expression, UCARPPrimitiveSet.wholePrimitiveSet()));
 //                    }
+
+
 
                     result.addSolution(routingPolicy);
                     result.addTrainFitness(fitness);

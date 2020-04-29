@@ -17,6 +17,10 @@ import gputils.DoubleData;
 
 import java.util.*;
 
+/**
+ * Most depricated code from the 2019 summer research period.
+ * This formed the foundation of the Matrix Evaluator.
+ */
 public class VehicleEvaluator_RoutingPolicy extends GPRoutingPolicy_frame {
     // matrix of priority values (also stored independently per task)
     //
@@ -450,6 +454,8 @@ public class VehicleEvaluator_RoutingPolicy extends GPRoutingPolicy_frame {
     public boolean recordingData() {
         return false;
     }
+
+
 
     @Override
     public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp) {
