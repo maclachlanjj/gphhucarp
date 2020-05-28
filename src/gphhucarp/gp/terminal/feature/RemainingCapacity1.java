@@ -5,9 +5,13 @@ import gphhucarp.gp.CalcPriorityProblem;
 import gphhucarp.gp.terminal.FeatureGPNode;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.List;
+
 /**
  * The remaining capacity of the closest alternative route to the candidate task.
  * If there is no alternative route, return 0.
+ *
+ * JJM: Currently only considers the *first* task in the chain.
  */
 
 public class RemainingCapacity1 extends FeatureGPNode {
@@ -18,15 +22,27 @@ public class RemainingCapacity1 extends FeatureGPNode {
 
     @Override
     public double value(CalcPriorityProblem calcPriorityProblem) {
-        Arc candidate = calcPriorityProblem.getCandidate();
+        List<Arc> candidate = calcPriorityProblem.getCandidate();
 
         if (calcPriorityProblem.getState()
-                .getRouteAdjacencyList(candidate).isEmpty())
+                .getRouteAdjacencyList(candidate.get(0)).isEmpty())
             return 0;
 
         NodeSeqRoute route1 = calcPriorityProblem.getState()
-                .getRouteAdjacencyList(candidate).get(0);
+                .getRouteAdjacencyList(candidate.get(0)).get(0);
 
         return route1.getCapacity() - route1.getDemand();
+
+        // original:
+//        Arc candidate = calcPriorityProblem.getCandidate();
+//
+//        if (calcPriorityProblem.getState()
+//                .getRouteAdjacencyList(candidate).isEmpty())
+//            return 0;
+//
+//        NodeSeqRoute route1 = calcPriorityProblem.getState()
+//                .getRouteAdjacencyList(candidate).get(0);
+//
+//        return route1.getCapacity() - route1.getDemand();
     }
 }

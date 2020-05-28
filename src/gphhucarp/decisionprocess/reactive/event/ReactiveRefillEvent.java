@@ -4,7 +4,6 @@ import gphhucarp.core.Arc;
 import gphhucarp.core.Graph;
 import gphhucarp.core.Instance;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
-import gphhucarp.decisionprocess.routingpolicy.VehicleEvaluator_RoutingPolicy;
 import gphhucarp.representation.route.NodeSeqRoute;
 import gphhucarp.decisionprocess.DecisionProcess;
 import gphhucarp.decisionprocess.DecisionProcessEvent;
@@ -13,6 +12,8 @@ import gphhucarp.decisionprocess.RoutingPolicy;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The reactive refill event occurs when the vehicle is going back to the depot.
@@ -23,6 +24,12 @@ import java.util.List;
  */
 
 public class ReactiveRefillEvent extends ReactiveEvent {
+
+    public ReactiveRefillEvent(double time,
+                               NodeSeqRoute route, List<Arc> base) {
+        super(time, route);
+        route.setNextTaskChain(base);
+    }
 
     public ReactiveRefillEvent(double time,
                                NodeSeqRoute route) {
@@ -52,21 +59,23 @@ public class ReactiveRefillEvent extends ReactiveEvent {
             // calculate the route-to-task map
             state.calcRouteToTaskMap(route);
 
-            if(policy instanceof VehicleEvaluator_RoutingPolicy)
-//                ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), state);
-                ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
-
             // decide which task to serve next
             List<Arc> pool = new LinkedList<>(state.getUnassignedTasks());
 
             ReactiveDecisionSituation rds = new ReactiveDecisionSituation(
                     pool, route, state);
 
-            Arc nextTask = policy.next(rds, decisionProcess);
-            route.setNextTask(nextTask);
+            // if the route has reach the end of its chain, select another one. Otherwise
+            // choose the next in the chain.
+            if(!route.hasNextTask())
+                route.setNextTaskChain(policy.next(rds,decisionProcess), state);
+            Arc nextTask = route.getNextTask();
+
+//            nextTask = policy.next(rds, decisionProcess);
+//            route.setNextTaskChain(nextTask);
 
             if(nextTask == null) {
-                route.setNextTask(instance.getDepotLoop());
+                route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()));
                 route.setStatic();
                 decisionProcess.getEventQueue().add(
                         new StaticEvent(route.getCost(), route));
@@ -76,7 +85,7 @@ public class ReactiveRefillEvent extends ReactiveEvent {
             } else {
                 state.removeUnassignedTasks(nextTask);
                 decisionProcess.getEventQueue().add(
-                        new ReactiveServingEvent(route.getCost(), route, nextTask));
+                        new ReactiveServingEvent(route.getCost(), route));
             }
         }
         else {
@@ -106,10 +115,6 @@ public class ReactiveRefillEvent extends ReactiveEvent {
             // add a new event
             decisionProcess.getEventQueue().add(
                     new ReactiveRefillEvent(route.getCost(), route));
-
-            if(policy instanceof VehicleEvaluator_RoutingPolicy)
-//                ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), state);
-                ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
         }
     }
 

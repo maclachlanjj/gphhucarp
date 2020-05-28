@@ -2,11 +2,13 @@ package gphhucarp.decisionprocess;
 
 import gphhucarp.core.*;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
+import gphhucarp.decisionprocess.routingpolicy.GPRolloutRoutingPolicy;
 import gphhucarp.representation.Solution;
 import gphhucarp.representation.route.NodeSeqRoute;
 
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The state for the decision making process of a reactive solution builder.
@@ -76,7 +78,7 @@ public class DecisionProcessState {
         unassignedTasks = new LinkedList<>(remainingTasks);
         solution = Solution.initialNodeSeqSolution(instance, numRoutes);
         for (NodeSeqRoute route : solution.getRoutes())
-            route.setNextTask(instance.getDepotLoop());
+            route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()));
         taskRemainingDemandFrac = new HashMap<>();
         for (Arc task : remainingTasks)
             taskRemainingDemandFrac.put(task, 1.0);
@@ -296,10 +298,6 @@ public class DecisionProcessState {
             taskToTaskMap.get(anotherTask).remove(task.getInverse());
         }
 
-//        System.out.println("arc from: " + task.getFrom() + " to: " + task.getTo());
-//        System.out.println("floodMap.size() - " + floodMap.size() );
-//        System.out.println("floodMap.get(task) - " + floodMap.get(task));
-//
 //        for(Map.Entry<Arc, List<Arc>> entry: floodMap.entrySet())
 //            System.out.println("Key from: " + entry.getKey().getFrom() + " key to: " + entry.getKey().getTo());
 
@@ -318,7 +316,7 @@ public class DecisionProcessState {
      * For each remaining task, the current route is excluded from the map and will be treated separately.
      * @param currRoute the current route.
      *
-     * Edited by Jordan MacLachlan on 11/14/2019 to accommodate vehicles taking into account
+     * Edited by Jordan MacLachlan on 14/11/2019 to accommodate vehicles taking into account
      * knowledge of other vehichles' target tasks, not just their current location.
      */
     public void calcRouteToTaskMap(NodeSeqRoute currRoute) {
@@ -384,9 +382,9 @@ public class DecisionProcessState {
      * @param seedMod
      * @return
      */
-    public DecisionProcessState deepClone(ReactiveDecisionSituation rds, int seedMod){
+    public DecisionProcessState deepClone(ReactiveDecisionSituation rds, long seedMod){
         resetReturned();
-        long seed_alt = (seedMod == -1) ? -1 : (seed + 1) * seedMod; // I guess this formula is somewhat arbitrary? Just got to make sure the original seed isn't 0.
+        long seed_alt = (seedMod == -1) ? -1 : seedMod; // I guess this formula is somewhat arbitrary? Just got to make sure the original seed isn't 0.
         Instance instance_clone = instance.deepResampleClone(this, seed_alt);
 
         List<Arc> remainingTasks_clone = new LinkedList<>(remainingTasks);
@@ -395,6 +393,8 @@ public class DecisionProcessState {
         Solution<NodeSeqRoute> solution_clone = solution.clone();
 
         Map<Arc, Double> taskRemainingDemandFrac_clone = new HashMap<>(taskRemainingDemandFrac);
+
+        if(GPRolloutRoutingPolicy.usingEstimatedValues()) seed_alt = seed;
 
         DecisionProcessState dps = new DecisionProcessState(instance_clone, seed_alt, remainingTasks_clone,
                 unassignedTasks_clone, solution_clone, taskRemainingDemandFrac_clone);

@@ -7,7 +7,10 @@ import gphhucarp.decisionprocess.routingpolicy.ensemble.EnsemblePolicy;
 import gphhucarp.decisionprocess.routingpolicy.ensemble.Combiner;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The aggregator combiner simply sums up the weighted priority calculated by all the elements,
@@ -17,16 +20,18 @@ import java.util.List;
 public class Aggregator extends Combiner {
 
     @Override
-    public Arc next(List<Arc> pool, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy) {
-        Arc next = pool.get(0);
-        next.setPriority(priority(next, route, state, ensemblePolicy));
+    public List<Arc> next(List<Arc> pool, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy) {
+        HashMap<List<Arc>, Double> priorities = new HashMap<>();
+
+        List<Arc> next = Stream.of(pool.get(0)).collect(Collectors.toList());
+        priorities.put(next, priority(next, route, state, ensemblePolicy));
 
         for (int i = 1; i < pool.size(); i++) {
-            Arc tmp = pool.get(i);
-            tmp.setPriority(priority(tmp, route, state, ensemblePolicy));
+            List<Arc> tmp = Stream.of(pool.get(i)).collect(Collectors.toList());
+            priorities.put(tmp, priority(tmp, route, state, ensemblePolicy));
 
-            if (Double.compare(tmp.getPriority(), next.getPriority()) < 0 ||
-                    (Double.compare(tmp.getPriority(), next.getPriority()) == 0 &&
+            if (Double.compare(priorities.get(tmp), priorities.get(next)) < 0 ||
+                    (Double.compare(priorities.get(tmp), priorities.get(next)) == 0 &&
                             ensemblePolicy.getTieBreaker().breakTie(tmp, next) < 0))
                 next = tmp;
         }
@@ -42,7 +47,7 @@ public class Aggregator extends Combiner {
      * @param ensemblePolicy the ensemble policy.
      * @return the priority of the arc calculated by the ensemble policy.
      */
-    private double priority(Arc arc, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy) {
+    private double priority(List<Arc> arc, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy) {
         double priority = 0;
         for (int i = 0; i < ensemblePolicy.size(); i++) {
             priority += ensemblePolicy.getPolicy(i).priority(arc, route, state) *

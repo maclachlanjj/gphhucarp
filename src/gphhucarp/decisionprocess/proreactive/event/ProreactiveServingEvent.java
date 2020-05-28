@@ -13,6 +13,9 @@ import gphhucarp.decisionprocess.DecisionProcessEvent;
 import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * A proactive-reactive serving event occurs whenever a vehicle arrives a node
  * on the way to serve the next task.
@@ -25,11 +28,12 @@ public class ProreactiveServingEvent extends DecisionProcessEvent {
     private int nextTaskIndex; // the index of the next task in the plan
 
     public ProreactiveServingEvent(double time,
-                                   NodeSeqRoute route, TaskSeqRoute plan, int nextTaskIndex) {
+                                   NodeSeqRoute route, TaskSeqRoute plan, Arc nextTask) {
         super(time);
         this.route = route;
         this.plan = plan;
         this.nextTaskIndex = nextTaskIndex;
+        route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()));
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ProreactiveServingEvent extends DecisionProcessEvent {
                     nextTaskIndex++;
 
                     decisionProcess.getEventQueue().add(
-                            new ProreactiveServingEvent(route.getCost(), route, plan, nextTaskIndex));
+                            new ProreactiveServingEvent(route.getCost(), route, plan, nextTask));
                 }
 
                 return;
@@ -76,7 +80,7 @@ public class ProreactiveServingEvent extends DecisionProcessEvent {
                 // add a new event: go to the depot to refill, and come back to
                 // continue the failed service.
                 decisionProcess.getEventQueue().add(
-                        new ProreactiveRefillThenServeEvent(route.getCost(), route, plan, nextTaskIndex));
+                        new ProreactiveRefillThenServeEvent(route.getCost(), route, plan, nextTask));
             } else {
                 // no route failure occurs, complete the service successfully
                 route.add(nextTask.getTo(), nextTaskRemainingFrac, instance);
@@ -87,7 +91,7 @@ public class ProreactiveServingEvent extends DecisionProcessEvent {
 
                 // add a new serving event
                 decisionProcess.getEventQueue().add(
-                        new ProreactiveServingEvent(route.getCost(), route, plan, nextTaskIndex));
+                        new ProreactiveServingEvent(route.getCost(), route, plan, nextTask));
             }
         }
         else if (currNode == nextTask.getTo() &&
@@ -100,17 +104,17 @@ public class ProreactiveServingEvent extends DecisionProcessEvent {
             nextTaskIndex++;
             nextTask = plan.get(nextTaskIndex);
 
-            boolean continueService = policy.continueService(nextTask, route, state);
+            boolean continueService = policy.continueService(Stream.of(nextTask).collect(Collectors.toList()), route, state);
 
             if (continueService) {
                 // if continue the service, then go to the next task
                 decisionProcess.getEventQueue().add(
-                        new ProreactiveServingEvent(route.getCost(), route, plan, nextTaskIndex));
+                        new ProreactiveServingEvent(route.getCost(), route, plan, nextTask));
             }
             else {
                 // go back to refill, and then go to serve the next task
                 decisionProcess.getEventQueue().add(
-                        new ProreactiveRefillThenServeEvent(route.getCost(), route, plan, nextTaskIndex));
+                        new ProreactiveRefillThenServeEvent(route.getCost(), route, plan, nextTask));
             }
         }
         else {
@@ -139,7 +143,7 @@ public class ProreactiveServingEvent extends DecisionProcessEvent {
             route.add(nextNode, 0, instance);
             // add a new event
             decisionProcess.getEventQueue().add(
-                    new ProreactiveServingEvent(route.getCost(), route, plan, nextTaskIndex));
+                    new ProreactiveServingEvent(route.getCost(), route, plan, nextTask));
         }
     }
 }

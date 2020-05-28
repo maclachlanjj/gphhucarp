@@ -1,6 +1,5 @@
 package gphhucarp.algorithm.pilotsearch2.event;
 
-import gphhucarp.algorithm.pilotsearch.PilotSearcher;
 import gphhucarp.core.Arc;
 import gphhucarp.core.Graph;
 import gphhucarp.core.Instance;
@@ -10,11 +9,12 @@ import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
 import gphhucarp.decisionprocess.reactive.event.ReactiveEvent;
-import gphhucarp.decisionprocess.reactive.event.ReactiveServingEvent;
 import gphhucarp.representation.route.NodeSeqRoute;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This event is almost the same as ReactiveServingEvent.java.
@@ -91,18 +91,19 @@ public class PilotSearchServingEvent extends ReactiveEvent {
             ReactiveDecisionSituation rds = new ReactiveDecisionSituation(
                     pool, route, state);
 
-            nextTask = policy.next(rds, decisionProcess);
+            if(!route.hasNextTask()) route.setNextTaskChain(policy.next(rds,decisionProcess), state);
+            nextTask = route.getNextTask();
 
             if (nextTask == null || nextTask.equals(instance.getDepotLoop())) {
                 // go back to the depot to refill, if the depot loop is selected
-                route.setNextTask(instance.getDepotLoop());
+                route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()), state);
 
                 decisionProcess.getEventQueue().add(
                         new PilotSearchRefillEvent(route.getCost(), route));
             }
             else {
                 state.removeUnassignedTasks(nextTask);
-                route.setNextTask(nextTask);
+                route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()), state);
                 decisionProcess.getEventQueue().add(
                         new PilotSearchServingEvent(route.getCost(), route, nextTask));
             }

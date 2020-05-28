@@ -17,7 +17,7 @@ import gputils.FileOutput.DualTree_FileOutput;
 import gputils.FileOutput.FileOutput;
 import gputils.FileOutput.Rollout_FileOutput;
 import gputils.ManualRuns.ManualRun;
-import gputils.ManualRuns.ManualRun_VE;
+import gputils.ManualRuns.ManualRun_ME;
 
 /**
  * A reactive evaluation model is a set of reactive decision process.
@@ -49,6 +49,8 @@ public class ReactiveEvaluationModel extends EvaluationModel {
                 dp.run();
                 Solution<NodeSeqRoute> solution = dp.getState().getSolution();
 
+//                System.out.println(solution.toString());
+
                 String s = ""; // output for recording rollout data
 
                 if(solution.isComplete(iSamples)){
@@ -71,7 +73,7 @@ public class ReactiveEvaluationModel extends EvaluationModel {
                     double normObjValue =
                             solution.objValue(objective); // getObjRefValue(i, objective);
 
-                    if(ManualRun_VE.isManualRun)
+                    if(ManualRun_ME.isManualRun)
                         System.out.println("\t\tFitness " + j + ": " + normObjValue);
 
                     if(DualTree_MakespanLimiter.recordData){

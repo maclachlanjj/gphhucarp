@@ -12,12 +12,13 @@ import gphhucarp.decisionprocess.reactive.event.ReactiveEvent;
 import gphhucarp.decisionprocess.reactive.event.ReactiveRefillEvent;
 import gphhucarp.decisionprocess.routingpolicy.GPRoutingPolicy;
 import gphhucarp.decisionprocess.routingpolicy.GPRoutingPolicy_frame;
-import gphhucarp.decisionprocess.routingpolicy.VehicleEvaluator_RoutingPolicy;
 import gphhucarp.representation.Solution;
 import gphhucarp.representation.route.NodeSeqRoute;
 import gphhucarp.representation.route.TaskSeqRoute;
 
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * An abstract of a decision process. A decision process is a process where
@@ -82,7 +83,7 @@ public abstract class DecisionProcess {
         DecisionProcessState state = new DecisionProcessState(instance, seed);
         PriorityQueue<DecisionProcessEvent> eventQueue = new PriorityQueue<>();
         for (NodeSeqRoute route : state.getSolution().getRoutes())
-            eventQueue.add(new ReactiveRefillEvent(0, route));
+            eventQueue.add(new ReactiveRefillEvent(0, route, Stream.of(state.getInstance().getDepotLoop()).collect(Collectors.toList())));
 
         return new ReactiveDecisionProcess(state, eventQueue, routingPolicy);
     }
@@ -103,7 +104,7 @@ public abstract class DecisionProcess {
         PriorityQueue<DecisionProcessEvent> eventQueue = new PriorityQueue<>();
         for (int i = 0; i < plan.getRoutes().size(); i++)
             eventQueue.add(new ProreactiveServingEvent(0,
-                    state.getSolution().getRoute(i), plan.getRoute(i), 0));
+                    state.getSolution().getRoute(i), plan.getRoute(i), instance.getDepotLoop()));
 
         return new ProreativeDecisionProcess(state, eventQueue, routingPolicy, plan);
     }
@@ -123,7 +124,7 @@ public abstract class DecisionProcess {
         DecisionProcessState state = new DecisionProcessState(instance, seed);
         PriorityQueue<DecisionProcessEvent> eventQueue = new PriorityQueue<>();
         for (NodeSeqRoute route : state.getSolution().getRoutes())
-            eventQueue.add(new PilotSearchRefillEvent(0, route, pilotSearcher));
+            eventQueue.add(new PilotSearchRefillEvent(0, route, pilotSearcher, instance.getDepotLoop()));
 
         return new ReactiveDecisionProcess(state, eventQueue, routingPolicy);
     }
@@ -178,7 +179,10 @@ public abstract class DecisionProcess {
         DecisionProcess[] res = new DecisionProcess[numClones];
 
         for(int i = 0; i < numClones; i++){
-            int newSeedBase = (base == -1) ? -1 : i % base;
+            int run = (base == -1) ? -1 : (i % base);
+
+            long newSeedBase = state.getSeed() + run + 1024; // 1024 to step off zero
+
             DecisionProcessState state_clone = state.deepClone(rds, newSeedBase);
 //            GPTree tree_clone = (GPTree)((GPRoutingPolicy_frame) routingPolicy).getGPTrees().clone(); // copy the current routing policy (the evolved rule)
 
@@ -187,7 +191,7 @@ public abstract class DecisionProcess {
             for(int k = 0; k < originalTrees.length; k++)
                 tree_clones[k] = (GPTree) originalTrees[k].clone();
 
-            RoutingPolicy policy_clone = new GPRoutingPolicy(routingPolicy.poolFilter, tree_clones); // DON'T use 'recursive' rollout, so defer to non-rollout routing logic
+            RoutingPolicy simple_policy = new GPRoutingPolicy(routingPolicy.poolFilter, tree_clones); // DON'T use 'recursive' rollout, so defer to non-rollout routing logic
             Solution<TaskSeqRoute> plan_clone = null;
             if(plan != null) plan_clone = plan.clone(); // <--- contains TaskSeqRoutes (null check for when we start at the depot)
 
@@ -199,7 +203,7 @@ public abstract class DecisionProcess {
                 eventQueue_clone.add(reactiveEvent.deepClone(route_clone)); // just create a new instance using the previously cloned route
             }
 
-            res[i] = this.getInstance(state_clone, eventQueue_clone, policy_clone, plan_clone);
+            res[i] = this.getInstance(state_clone, eventQueue_clone, simple_policy, plan_clone);
         }
 
         return res;

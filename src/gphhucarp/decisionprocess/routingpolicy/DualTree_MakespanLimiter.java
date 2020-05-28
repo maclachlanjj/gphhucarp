@@ -15,6 +15,8 @@ import gputils.DoubleData;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DualTree_MakespanLimiter extends DualTree_GPRoutingPolicy {
     public static final String P_DUALTREE_RETURNEARLY = "dual-tree-return-early";
@@ -48,7 +50,7 @@ public class DualTree_MakespanLimiter extends DualTree_GPRoutingPolicy {
     }
 
     @Override
-    public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp) {
+    public List<Arc> next(ReactiveDecisionSituation rds, DecisionProcess dp) {
         DecisionProcessState state = dp.getState();
         NodeSeqRoute route = rds.getRoute();
 
@@ -58,9 +60,11 @@ public class DualTree_MakespanLimiter extends DualTree_GPRoutingPolicy {
         List<Arc> candidates = poolFilter.filter(rds.getPool(), route, state);
         GPTree primaryPolicy = getGPTrees()[1];
 
+        List<Arc> seq;
         int vote = 0;
         for (Arc a : candidates) {
-            cpp = new CalcPriorityProblem(a, route, state);
+            seq = Stream.of(a).collect(Collectors.toList());
+            cpp = new CalcPriorityProblem(seq, route, state);
             tmp = new DoubleData();
             primaryPolicy.child.eval(null, 0, tmp, null, null, cpp);
 
@@ -90,7 +94,7 @@ public class DualTree_MakespanLimiter extends DualTree_GPRoutingPolicy {
             return null;
         } else if(canDoReturn) {
             // return to the depot early.
-            return state.getInstance().getDepotLoop();
+            return Stream.of(state.getInstance().getDepotLoop()).collect(Collectors.toList());
         }
         // else, utilise a secondary policy.
         return secondaryPolicy.next(rds, dp);

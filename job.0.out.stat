@@ -3,38 +3,517 @@ Generation: 0
 Best Individual:
 Subpopulation 0:
 Evaluated: true
-Fitness: [336.18258566453113]
+Fitness: [378.50734032896975]
 Tree 0:
- (+ (* FRT 0.4343451091460869) (* CFH CFD))
+ (+ CFH (/ DEM1 CTD))
 Tree 1:
- CFD
+ (max (- (* FUT FRT) (max DEM1 RQ1)) (min (- CFD RQ1) (+ CTT1 RQ)))
 
 Generation: 1
 Best Individual:
 Subpopulation 0:
 Evaluated: true
-Fitness: [343.57631870254534]
+Fitness: [374.6296715549602]
 Tree 0:
- (+ (* (+ FULL (/ 0.7240738485646073 FUT)) (max CFH DEM)) (* (/ SC RQ1) (max CFH FULL)))
+ (/ (- CFH RQ) (max SC CFH))
 Tree 1:
- (min (* 0.18001834993878174 (max DC DEM)) (/ (/ FULL CR) RQ))
+ (min (+ (/ (min DEM RQ1) (+ FULL DEM)) (/ (max DEM1 SC) (- DC 0.7777793352458221))) (- (+ (- CTT1 0.2383846693332894) (min CFD CFR1)) (- (max FULL DC) (min FUT CR))))
 
 Generation: 2
 Best Individual:
 Subpopulation 0:
 Evaluated: true
-Fitness: [328.0130832981649]
+Fitness: [366.40072488445486]
 Tree 0:
- (+ (* (* CTT1 CFD) (max CFH DEM)) (* (/ SC RQ1) (max CFH FULL)))
+ (+ (* RQ (/ (* (* CFH SC) (min CFD DEM1)) (/ (+ RQ1 DEM) (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (- FULL CTD)) (max (max FUT FUT) (- RQ1 FRT)))))
 Tree 1:
- (min (* 0.18001834993878174 (max DC DEM)) (/ (/ FULL CR) (min (+ (+ (* CFH DEM) (max CTD SC)) (min (- RQ 0.06272855204410122) (+ CTT1 0.14249881472511938))) (+ (max RQ1 DC) (min (+ CTT1 SC) (+ RQ1 FRT))))))
+ (/ (min (max DC FRT) (/ CFH CFH)) (+ (/ CFH CFR1) (+ CR CR)))
 
 Generation: 3
 Best Individual:
 Subpopulation 0:
 Evaluated: true
-Fitness: [342.37455448024866]
+Fitness: [365.67825924794363]
 Tree 0:
- (+ (/ (min RQ1 DC) (* CTT1 (min DEM1 CR))) (* (* (/ RQ CTD) RQ1) (/ (* (+ CFH CFH) (max CFH DEM)) (/ RQ CTD))))
+ (+ (* RQ (/ (* (* SC FULL) (+ CFH FUT)) (/ (+ RQ1 DEM) (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (- FULL CTD)) (max (max FUT FUT) (- RQ1 FRT)))))
 Tree 1:
- (+ CTD (- (- SC FUT) (+ CR DEM)))
+ (/ (min (max DC FRT) (/ CFH CFH)) (+ (/ CFH CFR1) (+ CR CR)))
+
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [360.2069625205969]
+Tree 0:
+ (+ (* (* (max DEM1 FUT) (min DC CFH)) (- (+ FUT CFH) (/ 0.303694892929406 CTD))) (/ DEM1 CTD))
+Tree 1:
+ (- (max (+ (min (* DC CTD) (* FRT SC)) (- (/ DEM1 CTD) (min CTT1 RQ))) (- (+ (/ 0.7798731186111282 DC) (min DC CFR1)) (+ (* DEM1 CFR1) (/ DC FRT)))) (- (+ (max (/ CTD CR) (/ FUT CTD)) (* (- FUT CTD) (- SC CFR1))) (min (max (/ RQ1 CFD) (* SC CFD)) (min (/ CR SC) (/ SC CTD)))))
+
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [354.282928571398]
+Tree 0:
+ (+ (* DC CFH) CTD)
+Tree 1:
+ (max CFH (min (- CFD RQ1) CR))
+
+Generation: 6
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [351.90586581435014]
+Tree 0:
+ (+ (+ (* RQ (/ (* (* CFH SC) (min CFD DEM1)) (/ (+ RQ1 DEM) (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (- FULL CTD)) (max (max FUT FUT) (- RQ1 FRT))))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (- FULL CTD)) (max (max FUT FUT) (- RQ1 FRT)))))
+Tree 1:
+ (/ (* (* CFH SC) (min CFD DEM1)) (min (- (min FULL DEM1) (max 0.3213011051543698 RQ1)) (+ (max CFH 0.5257182530429247) (min CTD CFR1))))
+
+Generation: 7
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [351.5579313712381]
+Tree 0:
+ (+ (* RQ (/ (* (* CFH SC) (min (+ FRT DC) DEM1)) (/ (+ RQ1 DEM) (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (/ DEM1 CTD)) (/ DEM1 FRT))))
+Tree 1:
+ (+ (/ SC CTT1) (+ FRT DC))
+
+Generation: 8
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [362.2515699772214]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (* FRT FRT) (* DEM1 CR)))))
+Tree 1:
+ (min CR CFR1)
+
+Generation: 9
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [342.01719716986753]
+Tree 0:
+ (+ (* RQ (/ (* (* CFH SC) (min (+ FRT DC) DEM1)) (/ (max (- RQ SC) (min CFD CTD)) (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (/ DEM1 CTD)) (/ DEM1 FRT))))
+Tree 1:
+ (+ (/ SC CTT1) (+ FRT DC))
+
+Generation: 10
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [364.79412651010915]
+Tree 0:
+ (+ (* RQ (/ (* CFH SC) (/ RQ1 (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (/ DEM1 CTD)) (/ DEM1 FRT))))
+Tree 1:
+ (+ (/ SC CTT1) (+ FRT DC))
+
+Generation: 11
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [361.4220886555563]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (* FRT CR))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (* FRT FRT) (* DEM1 CR)))))
+Tree 1:
+ (+ (* (* CFD CFH) (max (+ DEM1 (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (max (max FUT FUT) (- RQ1 FRT))) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (* FRT FRT) (* DEM1 CR)))))
+
+Generation: 12
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [354.8760894428854]
+Tree 0:
+ (+ (* RQ (/ (* (* CFH SC) (min (+ FRT DC) DEM1)) (/ (+ RQ1 DEM) (- DEM FULL)))) (max (/ FUT (* (min CR CFR1) (- CTT1 0.10622778009285772))) (- (- (* CFH RQ1) (/ DEM1 CTD)) (/ DEM1 FRT))))
+Tree 1:
+ (+ (/ (/ (* DEM 0.4521165833344821) (* CR DEM1)) (max (max CR CFR1) (* (* SC FULL) (- DC 0.022918658237067735)))) (+ CR CR))
+
+Generation: 13
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [349.8177711896262]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (* (* CFH SC) (min CFD DEM1)) (* DEM1 CR)))))
+Tree 1:
+ (* (/ CR CR) (- CTT1 0.10622778009285772))
+
+Generation: 14
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [348.7329140651056]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (- CTT1 0.10622778009285772))))
+Tree 1:
+ (- (min DEM1 DC) (max (max CR FUT) (- RQ1 FRT)))
+
+Generation: 15
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [351.8324105732421]
+Tree 0:
+ (+ (* (* CFD CFH) (max (+ (/ CTT1 FRT) (min (/ (+ CTT1 CFH) CTT1) (/ CR (+ RQ DEM1)))) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min (/ CTT1 FRT) DC)) FUT) (/ (* FRT FRT) (* DEM1 CR)))))
+Tree 1:
+ (* (+ (/ (* FRT FRT) (* DEM1 CR)) (- (- (- RQ SC) (+ CR FRT)) (/ (* FRT FRT) (* DEM1 CR)))) FRT)
+
+Generation: 16
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [349.4897870973197]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))))
+Tree 1:
+ (min CR (+ (/ SC CTT1) (/ CR (+ RQ DEM1))))
+
+Generation: 17
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [341.7380903295242]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* SC FULL)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- 0.8360653605572376 (min (* FRT CR) DC)) (/ (* FRT FRT) (* DEM1 CR)))))
+Tree 1:
+ (/ (* (/ CTT1 FUT) FRT) (* DEM1 CR))
+
+Generation: 18
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [353.2160399084627]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))) (* FRT CR)))))
+Tree 1:
+ (- (/ CTT1 FRT) (max (* DEM1 CR) (- RQ1 FRT)))
+
+Generation: 19
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [341.19538983523205]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))))
+Tree 1:
+ (+ (* (* FRT FRT) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (* FRT FRT) (- 0.8360653605572376 (min DEM1 DC)))) 0.8360653605572376))
+
+Generation: 20
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [340.33009714362703]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))))
+
+Generation: 21
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [356.35264708396835]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL (min CR CFR1))) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (* FRT CR)))
+Tree 1:
+ (+ (* DEM1 CR) RQ)
+
+Generation: 22
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [335.2142807991234]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (/ CTT1 FRT) (* FRT CR)))))
+
+Generation: 23
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [348.79559049372966]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (- RQ SC) CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (+ CR SC)) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (min CR RQ1) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))))
+
+Generation: 24
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [349.89413115099154]
+Tree 0:
+ (+ (* (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD SC))) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))))
+Tree 1:
+ (+ (* (+ FRT CFH) (max (+ CR (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (+ CFH (* 0.20067330815327544 CFH)) FRT))
+
+Generation: 25
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [337.3235262588547]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))) (max (max CR FULL) (* FRT CR)))) (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (/ CTT1 FRT)) (+ CR FRT)) (/ (* FRT FRT) (* DEM1 CR))))))
+Tree 1:
+ (+ (min DEM1 DC) (+ (/ CTT1 (- RQ1 FRT)) (max (+ (/ CTT1 FRT) (- FULL CFH)) (+ RQ1 DEM))))
+
+Generation: 26
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [342.59346025571114]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (min DEM DEM1)) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))))
+Tree 1:
+ (min CR (min (/ (+ CR SC) (min CFH RQ1)) (max CFH (min CFD CTD))))
+
+Generation: 27
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [354.9727026273129]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ CFD
+
+Generation: 28
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [362.08808035303264]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (- (- (- 0.8360653605572376 (min DEM1 DC)) (* FRT CR)) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (+ (/ CTT1 FRT) (- FULL CFH))))))
+
+Generation: 29
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [345.7025061155799]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (* DEM1 CR) (- FULL CFH)) (max CR FULL))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (* (+ FRT CFH) (max (/ (/ DEM1 CTT1) (max DEM1 SC)) (- (min CFD CTD) (- DC CFD)))))
+
+Generation: 30
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [342.08439018239596]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (max CR FULL)))))
+Tree 1:
+ (max (/ (- DEM FUT) (- FUT FUT)) (/ CTT1 FRT))
+
+Generation: 31
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [345.3701750255418]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (/ (+ CR SC) (min CFH RQ1)) (/ (max CR FULL) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (* 0.8871263043891195 CFR1)
+
+Generation: 32
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [348.0956651935647]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* (/ (/ FUT CFR1) (max CFH FULL)) CR)))) (+ (min (/ (+ FRT SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- FRT (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (min CFH RQ1))
+
+Generation: 33
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [334.51643941814467]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (- RQ SC) CFH)) (max (/ CTT1 FRT) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (* FRT CR)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (+ FRT CFH) (max CFH FULL)))))))
+Tree 1:
+ (min (min CR CTD) (+ (* RQ DEM1) (+ CFD 0.23411742990021456)))
+
+Generation: 34
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [337.33569917665193]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (/ (+ CR SC) (min CFH RQ1)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (min DEM1 DC))))))
+Tree 1:
+ (max CFH FULL)
+
+Generation: 35
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [344.9031291959153]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD FRT))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max DC (* CFD FUT)) (/ (/ FUT CFR1) (* 0.20067330815327544 CFH)))))))
+Tree 1:
+ (/ (+ CR SC) (* (+ FULL FRT) (* (max CTD (* CFD CFR1)) (min RQ1 (/ FUT CTT1)))))
+
+Generation: 36
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [337.43412367405233]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (- RQ SC) CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (* FRT CR)) (/ CTT1 FRT)) (/ (/ CTT1 FRT) (/ (max (max CR FULL) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (max (max CR FULL) (max FRT (min CFH RQ1)))
+
+Generation: 37
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [351.6885803367889]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (/ (+ CR SC) (min CFH RQ1)) (/ (/ CTT1 FRT) (/ (max (max CR FULL) (* DEM1 CR)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (- (- (- (max (- RQ SC) (min CFD CTD)) (max (- RQ SC) (min CFD CTD))) (* (max (max CR FULL) (+ (/ CR FRT) (- FULL CFH))) CR)) (max (+ (/ CTT1 FRT) (+ (/ CTT1 FRT) (- FULL CFH))) (max CR FULL))))
+
+Generation: 38
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [346.18209105704284]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (- RQ SC) CFH)) (max (max CR FULL) (* (- RQ SC) CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (/ (+ CR SC) (min CFH RQ1)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (min (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 SC) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (+ FRT CFH) (max CFH FULL)))))) CFH)
+
+Generation: 39
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [349.42310036956167]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (+ (/ CTT1 FRT) (+ (/ CTT1 FRT) (- FULL CFH)))))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (+ CR SC) (/ (max (* (max (/ CFR1 RQ1) (/ 0.14126541448863528 CFD)) (- (max RQ RQ1) (+ RQ1 CFR1))) (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT))) (- FULL (max (+ FULL FRT) (* CFD FUT)))))
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [336.17190804764175]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (max CR FULL)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR))) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (- CFH CFH)))))))
+Tree 1:
+ (* (* (/ (- DEM FUT) (- FUT FUT)) CR) (max (min CFH RQ1) CR))
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [340.9728890910953]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (* DEM1 CR))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (- FULL (min DEM1 DC))) (/ (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR))) (/ (- CFH CFR1) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (/ CTT1 FRT) (* (+ FRT CFH) (max (* FRT CR) (- (min (* (+ FRT CFH) (* 0.24609577102283742 FRT)) (- (+ RQ CFR1) (- DEM 0.9112206428028643))) (* FRT CR)))))
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [337.66496657004717]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (max (+ FULL FRT) (* CFD FUT)) CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (* FRT CR)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (max CR FULL) (* CFD FUT)) (/ (+ CR SC) (max CFH FULL)))))))
+Tree 1:
+ (- (- (/ (/ CTT1 FRT) CFR1) (+ SC RQ1)) (min (+ FULL FRT) (- CTD 0.20942495234959124)))
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [335.51726148365526]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (max (+ FULL FRT) (* CFD FUT)) CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (* FRT CR)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (max CR FULL) (* CFD FUT)) (/ (+ CR SC) (max CFH FULL)))))))
+Tree 1:
+ (- (- (/ 0.9112206428028643 CFR1) (+ SC RQ1)) (min (+ FULL FRT) (- CTD 0.20942495234959124)))
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [361.07040050909825]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ SC (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (min (/ (/ (/ FUT CFR1) (max CFH FULL)) (min CFH RQ1)) (min CFD CTD)) (* 0.20067330815327544 CFH))
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [337.9221699063178]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (max CR FULL) (/ (/ CTT1 FRT) (/ 0.8815332571928647 (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (/ (max (max CFD CFH) (min DC CFH)) (+ (+ CFD CTT1) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR)))))
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [340.07081643676935]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (- RQ SC) CFH)) (* (max FULL (- 0.9661346636231901 RQ1)) CR))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (min (* DEM1 CR) (max (- RQ SC) (min CFD CTD))) (min CFD CTD))) (- (- (- 0.8360653605572376 (* FRT CR)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (+ FULL DC) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (- (- RQ SC) (max CR FULL))
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [348.1394545367767]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ SC (+ DEM1 FULL))))))
+Tree 1:
+ (max (max SC (* RQ1 0.8166578910365881)) (/ (/ 0.9923677739022605 DEM1) (min RQ1 DEM)))
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [354.2160799809424]
+Tree 0:
+ (+ (* (+ FRT CFH) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (max CR FULL)))) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (* (* FRT CFH) (* 0.24609577102283742 FRT))
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [344.7097726839388]
+Tree 0:
+ (+ (* (+ FRT CFH) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (max CR FULL)))) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+Tree 1:
+ (+ (* (+ FRT CFH) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (min DEM1 DC)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (/ FUT CFR1) (max CFH FULL)))))))
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: [345.3305784098573]
+Tree 0:
+ (+ (* (+ FRT CFH) (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (* FRT CR))))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- FULL CFH)) (max (max CR FULL) (max CR FULL)))) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (min CFD CTD))))))
+Tree 1:
+ CR
+
+Best Individual of Run:
+Subpopulation 0:
+Evaluated: true
+Fitness: [334.51643941814467]
+Tree 0:
+ (+ (* (+ FRT CFH) (max (+ (/ CTT1 FRT) (- (- RQ SC) CFH)) (max (/ CTT1 FRT) (* DEM1 CR)))) (+ (min (/ (+ CR SC) (min CFH RQ1)) (max (- RQ SC) (min CFD CTD))) (- (- (- 0.8360653605572376 (* FRT CR)) (+ CR FRT)) (/ (/ CTT1 FRT) (/ (max (+ FULL FRT) (* CFD FUT)) (/ (+ FRT CFH) (max CFH FULL)))))))
+Tree 1:
+ (min (min CR CTD) (+ (* RQ DEM1) (+ CFD 0.23411742990021456)))

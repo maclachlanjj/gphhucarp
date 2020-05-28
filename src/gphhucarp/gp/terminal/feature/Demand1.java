@@ -9,6 +9,8 @@ import java.util.List;
 /**
  * The expected demand of the closest task to the candidate.
  * If there is no remaining task, return 0.
+ *
+ * Only considers the *first* task in the chain.
  */
 
 public class Demand1 extends FeatureGPNode {
@@ -19,10 +21,10 @@ public class Demand1 extends FeatureGPNode {
 
     @Override
     public double value(CalcPriorityProblem calcPriorityProblem) {
-        Arc candidate = calcPriorityProblem.getCandidate();
+        List<Arc> candidate = calcPriorityProblem.getCandidate();
 
         List<Arc> taskAdjacentList = calcPriorityProblem.getState()
-                .getTaskAdjacencyList(candidate);
+                .getTaskAdjacencyList(candidate.get(0));
 
         if (taskAdjacentList.isEmpty())
             return 0;
@@ -30,5 +32,19 @@ public class Demand1 extends FeatureGPNode {
         Arc task1 = taskAdjacentList.get(0);
 
         return task1.getExpectedDemand();
+
+
+        // original
+//        Arc candidate = calcPriorityProblem.getCandidate();
+//
+//        List<Arc> taskAdjacentList = calcPriorityProblem.getState()
+//                .getTaskAdjacencyList(candidate);
+//
+//        if (taskAdjacentList.isEmpty())
+//            return 0;
+//
+//        Arc task1 = taskAdjacentList.get(0);
+//
+//        return task1.getExpectedDemand();
     }
 }

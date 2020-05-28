@@ -11,17 +11,20 @@ import gphhucarp.decisionprocess.DecisionProcessEvent;
 import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class ProreactiveRefillThenServeEvent extends DecisionProcessEvent {
     private NodeSeqRoute route;
     private TaskSeqRoute plan;
-    private int nextTaskIndex; // the index of the next task in the plan
+    private Arc nextTask; // the index of the next task in the plan
 
     public ProreactiveRefillThenServeEvent(double time,
-                                           NodeSeqRoute route, TaskSeqRoute plan, int nextTaskIndex) {
+                                           NodeSeqRoute route, TaskSeqRoute plan, Arc nextTask) {
         super(time);
         this.route = route;
         this.plan = plan;
-        this.nextTaskIndex = nextTaskIndex;
+        this.nextTask = nextTask;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class ProreactiveRefillThenServeEvent extends DecisionProcessEvent {
             // now going back to continue the failed service
             // this is essentially a reactive serving event
             decisionProcess.getEventQueue().add(
-                    new ProreactiveServingEvent(route.getCost(), route, plan, nextTaskIndex));
+                    new ProreactiveServingEvent(route.getCost(), route, plan, nextTask));
         }
         else {
             // continue going to the depot if not arrived yet
@@ -69,7 +72,7 @@ public class ProreactiveRefillThenServeEvent extends DecisionProcessEvent {
             route.add(nextNode, 0, instance);
             // add a new event
             decisionProcess.getEventQueue().add(
-                    new ProreactiveRefillThenServeEvent(route.getCost(), route, plan, nextTaskIndex));
+                    new ProreactiveRefillThenServeEvent(route.getCost(), route, plan, nextTask));
         }
     }
 }

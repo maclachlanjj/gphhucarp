@@ -45,7 +45,7 @@ public class SeqPilotSearcher extends PilotSearcher {
             if (routeNextTask.equals(state.getInstance().getDepotLoop())) {
                 queue.add(new ReactiveRefillEvent(route.getCost(), route));
             } else {
-                queue.add(new ReactiveServingEvent(route.getCost(), route, routeNextTask));
+                queue.add(new ReactiveServingEvent(route.getCost(), route));
             }
 
             ReactiveDecisionProcess dp = new ReactiveDecisionProcess(state, queue, routingPolicy);
@@ -68,7 +68,7 @@ public class SeqPilotSearcher extends PilotSearcher {
         if (routeNextTask.equals(state.getInstance().getDepotLoop())) {
             event = new ReactiveRefillEvent(route.getCost(), route);
         } else {
-            event = new ReactiveServingEvent(route.getCost(), route, routeNextTask);
+            event = new ReactiveServingEvent(route.getCost(), route);
         }
 
         ReactiveDecisionProcess dp = new ReactiveDecisionProcess(state, queue, routingPolicy);

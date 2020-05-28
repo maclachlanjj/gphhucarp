@@ -9,11 +9,11 @@ import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.collaborative.CollaborativeDecisionProcess;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
-import gphhucarp.decisionprocess.reactive.event.ReactiveRefillEvent;
-import gphhucarp.decisionprocess.reactive.event.ReactiveServingEvent;
 import gphhucarp.decisionprocess.reactive.event.StaticEvent;
-import gphhucarp.decisionprocess.routingpolicy.VehicleEvaluator_RoutingPolicy;
 import gphhucarp.representation.route.NodeSeqRoute;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The reactive refill event occurs when the vehicle is going back to the depot.
@@ -55,18 +55,13 @@ public class CollaborativeRefillEvent extends CollaborativeEvent {
             // calculate the route-to-task map
             state.calcRouteToTaskMap(route);
 
-//            if(route.getNodeSequence().size() > 1) {
-//                if (policy instanceof VehicleEvaluator_RoutingPolicy)
-//                    ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), decisionProcess);
-//                //                ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
-//            }
-
             ReactiveDecisionSituation rds = new ReactiveDecisionSituation(state.getUnassignedTasks(), route, state);
-            Arc nextTask = policy.next(rds, decisionProcess);
-            route.setNextTask(nextTask);
+
+            if(!route.hasNextTask()) route.setNextTaskChain(policy.next(rds,decisionProcess), state);
+            Arc nextTask = route.getNextTask();
 
             if(nextTask == null) {
-                route.setNextTask(instance.getDepotLoop());
+                route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()));
                 route.setStatic();
                 decisionProcess.getEventQueue().add(
                         new StaticEvent(route.getCost(), route));
@@ -103,10 +98,6 @@ public class CollaborativeRefillEvent extends CollaborativeEvent {
             // add a new event
             decisionProcess.getEventQueue().add(
                     new CollaborativeRefillEvent(route.getCost(), route));
-
-//            if(policy instanceof VehicleEvaluator_RoutingPolicy)
-//                ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), decisionProcess);
-//                ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
         }
     }
 
@@ -175,10 +166,5 @@ public class CollaborativeRefillEvent extends CollaborativeEvent {
         } else {
             route.add(nextNode, 0, instance);
         }
-
-//        if(dp.getRoutingPolicy() instanceof VehicleEvaluator_RoutingPolicy)
-//            ((VehicleEvaluator_RoutingPolicy) dp.getRoutingPolicy()).updateMatrix(state.getUnassignedTasks(), dp);
-////          ((VehicleEvaluator_RoutingPolicy) dp.getRoutingPolicy()).clearThenUpdateMatrix(route, route.getQueuedTasks(), state);
-//
-         }
+     }
 }

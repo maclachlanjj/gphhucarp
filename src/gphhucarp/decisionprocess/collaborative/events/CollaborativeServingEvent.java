@@ -7,10 +7,10 @@ import gphhucarp.decisionprocess.DecisionProcess;
 import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
-import gphhucarp.decisionprocess.routingpolicy.VehicleEvaluator_RoutingPolicy;
 import gphhucarp.representation.route.NodeSeqRoute;
 
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The reactive serving event occurs when the vehicle is on the way
@@ -26,7 +26,7 @@ public class CollaborativeServingEvent extends CollaborativeEvent {
         super(time);
         this.route = route;
 
-        route.setNextTask(nextTask);
+        route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()));
     }
 
     @Override
@@ -76,18 +76,9 @@ public class CollaborativeServingEvent extends CollaborativeEvent {
                 state.getUnassignedTasks().add(nextTask);
                 state.getUnassignedTasks().add(nextTask.getInverse());
 
-                route.setNextTask(instance.getDepotLoop()); // got to update the practical position of this node
+                route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList())); // got to update the practical position of this node
 
-                // reset this vehicle's queue when a route failure occurs
-
-//                if(policy instanceof VehicleEvaluator_RoutingPolicy)
-//                    ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), decisionProcess);
-
-//                    ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
-                // don't need to set nextTask to anything as the refillEvent doesn't require one, so it's just ignored.
-
-                 }
-            else {
+             } else {
                 // no route failure occurs, complete the service successfully (either in full, or part)
                 route.add(nextTask.getTo(), state.getTaskRemainingDemandFrac(nextTask), instance);
 
@@ -119,10 +110,6 @@ public class CollaborativeServingEvent extends CollaborativeEvent {
             // add a new event
             decisionProcess.getEventQueue().add(
                     new CollaborativeServingEvent(route.getCost(), route, nextTask));
-
-//            if(policy instanceof VehicleEvaluator_RoutingPolicy)
-////                ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), decisionProcess);
-//                ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
         }
     }
 
@@ -131,7 +118,7 @@ public class CollaborativeServingEvent extends CollaborativeEvent {
         DecisionProcessState state = decisionProcess.getState();
 
         ReactiveDecisionSituation rds = new ReactiveDecisionSituation(state.getUnassignedTasks(), route, state);
-        route.setNextTask(policy.next(rds, decisionProcess));
+        route.setNextTaskChain(policy.next(rds, decisionProcess), state);
 
         decisionProcess.getEventQueue().remove(this);
 
@@ -156,15 +143,8 @@ public class CollaborativeServingEvent extends CollaborativeEvent {
         // calculate the route-to-task map
         state.calcRouteToTaskMap(route);
 
-        // reset this vehicle's queue when it successfully completes a task
-
-//        if(policy instanceof VehicleEvaluator_RoutingPolicy)
-//            ((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), decisionProcess);
-////                ((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), decisionProcess);
-
-
         ReactiveDecisionSituation rds = new ReactiveDecisionSituation(state.getUnassignedTasks(), route, state);
-        route.setNextTask(policy.next(rds, decisionProcess));
+        route.setNextTaskChain(policy.next(rds, decisionProcess), state);
 
         nextTaskCheck(decisionProcess, route.getNextTask(), route);
     }

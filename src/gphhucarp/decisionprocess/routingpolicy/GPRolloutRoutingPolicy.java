@@ -15,10 +15,9 @@ import gphhucarp.decisionprocess.reactive.event.ReactiveServingEvent;
 import gphhucarp.representation.route.NodeSeqRoute;
 import gputils.MinHeap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A GP-evolved routing policy. The default
@@ -82,7 +81,7 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
     }
 
     @Override
-    public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp) {
+    public List<Arc> next(ReactiveDecisionSituation rds, DecisionProcess dp) {
         Arc[] topKcandidates = topK(rds, k);
 
         if(topKcandidates == null) return null;
@@ -90,7 +89,9 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
 
         /***
          *  Start cutting down the candidates
-         *  Will clearly only function with original k > 1
+         *  Will only function with original k > 1
+         *
+         *  trimCandidates:
          */
         int newMax = trimCandidates(k_temp, topKcandidates);
 
@@ -124,14 +125,17 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
         // capture the state of the returned array
         List<Boolean> returnedCapture = new ArrayList<>(originalState.getReturned());
 
+        /**
+         * #todo
+         */
         int i = 0;
         for(int a = 0; a < k_temp; a++){
             Arc arc = topKcandidates[a];
             for(int run = 0; run < n; run++){
                 DecisionProcess sub_dp = stateClones[i++];
                 NodeSeqRoute matchingRoute = sub_dp.getState().getRoute(originalState.getReturned(), originalRoute);
-                sub_dp.getEventQueue().add(new ReactiveServingEvent(originalRoute.getCost(), matchingRoute, arc));
-                sub_dp.getState().removeUnassignedTasks(arc); matchingRoute.setNextTask(arc);
+                sub_dp.getEventQueue().add(new ReactiveServingEvent(originalRoute.getCost(), matchingRoute));
+                sub_dp.getState().removeUnassignedTasks(arc); matchingRoute.setNextTaskChain(Stream.of(arc).collect(Collectors.toList()));
 
                 sub_dp.runRollout(rolloutSteps);
                 results[a][run] = sub_dp.getState().getSolution().objValue(Objective.TOTAL_COST); // how to access EvaluationModel?
@@ -140,6 +144,9 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
             }
         }
 
+        /**
+         * todo
+         */
         if(!atDepot && underThreshold) {
             for (int run = 0; run < n; run++) {
                 DecisionProcess sub_dp = stateClones[i++];
@@ -170,14 +177,16 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
         if(index == k_temp) {
             // an early refill is the best option
             Arc depotLoop = rds.getState().getInstance().getDepotLoop();
-            originalRoute.setNextTask(depotLoop);
+            originalRoute.setNextTaskChain(Stream.of(depotLoop).collect(Collectors.toList()));
             originalRoute.toggleActiveRefill(false);
             return null;
         } else {
+            List<Arc> res = Stream.of(topKcandidates[index]).collect(Collectors.toList());
             // one of the tasks is the best pick
-            originalRoute.setNextTask(topKcandidates[index]);
+            originalRoute.setNextTaskChain(res, originalState);
 //            System.out.println("selecting: " + topKcandidates[index]);
-            return topKcandidates[index];
+//            return topKcandidates[index];
+            return res;
         }
     }
 
@@ -195,11 +204,13 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
 
         MinHeap heap = new MinHeap(k_temp); // I think this will be a reasonably efficient means of getting the lowest k_temp items.
 
-        for (int i = 0; i < filteredPool.size(); i++) {
-            Arc tmp = filteredPool.get(i);
-            tmp.setPriority(priority(tmp, route, state));
+        priorities = new HashMap<>();
 
-            heap.insert(tmp, tieBreaker);
+        for (int i = 0; i < filteredPool.size(); i++) {
+            List<Arc> tmpList = Stream.of(filteredPool.get(i)).collect(Collectors.toList());
+            priorities.put(tmpList, priority(tmpList, route, state));
+
+            heap.insert(tmpList.get(0), tieBreaker);
         }
 
         heap.minHeap();
@@ -216,15 +227,25 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
         return resHeap;
     }
 
+    /**
+     * returns either:
+     *  - the index after the last candidate that matches the top, or
+     *  - the index of the biggest priority gap in the top k candidates.
+     *
+     * @param k_temp
+     * @param topKcandidates
+     * @return
+     */
     public int trimCandidates(int k_temp, Arc[] topKcandidates){
         double distances[] = new double[topKcandidates.length];
 
+        // calculate the priority distance between each task
         for(int i = 0; i < topKcandidates.length - 1; i++)
             distances[i] = topKcandidates[i + 1].getPriority() - topKcandidates[i].getPriority();
 
+        // find the biggest priority gap
         double max = Double.NEGATIVE_INFINITY;
         int index = -1;
-
         for(int i = 0; i < distances.length; i++){
             double v = distances[i];
             if(Double.compare(v, max) > 0){
@@ -240,43 +261,6 @@ public class GPRolloutRoutingPolicy extends GPRoutingPolicy_frame {
             if(Double.compare(topKcandidates[i].getPriority(), firstPriority) == 0) altIndex++;
 
         return Math.max(index + 1, altIndex);
-    }
-
-    public int trimCandidates2(int k_temp, Arc[] topKcandidates){
-        if(! (cutCandidatesSwitch && k_temp > 1)) return k_temp;
-
-        // first, calculate the priority-means of each set of arcs
-        double[] means = new double[k_temp];
-
-        for (int i = 0; i < k_temp; i++)
-            for (int j = i; j < k_temp; j++)
-                means[i] += topKcandidates[j].getPriority();
-
-        for (int i = 0; i < k_temp; i++)
-            means[i] /= (i + 1);
-
-        double[] distMeans = new double[k_temp - 1];
-
-        double max = Double.NEGATIVE_INFINITY;
-        int maxIndex = -1;
-        distMeans[0] = means[1] - means[0];
-        boolean allTheSame = true;
-        for (int i = 1; i < k_temp - 1; i++) {
-            distMeans[i] = means[i + 1] - means[i];
-
-            if (distMeans[i] != distMeans[0]) allTheSame = false;
-
-            if (Double.compare(distMeans[i], max) >= 0) {
-                max = distMeans[i];
-                maxIndex = i;
-            }
-        }
-
-        if (allTheSame) {
-            return k_temp; // superfluous, but adding here for clarity: if the distMeans are all the same, include all candidates.
-        } else {
-            return maxIndex + 1; // otherwise, slice off the larger arcs
-        }
     }
 
     public static boolean usingEstimatedValues(){

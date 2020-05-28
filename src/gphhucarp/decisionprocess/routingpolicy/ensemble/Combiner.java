@@ -13,5 +13,5 @@ import java.util.List;
 
 public abstract class Combiner {
 
-    public abstract Arc next(List<Arc> pool, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy);
+    public abstract List<Arc> next(List<Arc> pool, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy);
 }

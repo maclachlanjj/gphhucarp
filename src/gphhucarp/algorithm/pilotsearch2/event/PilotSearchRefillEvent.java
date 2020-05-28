@@ -1,6 +1,5 @@
 package gphhucarp.algorithm.pilotsearch2.event;
 
-import gphhucarp.algorithm.pilotsearch.PilotSearcher;
 import gphhucarp.core.Arc;
 import gphhucarp.core.Graph;
 import gphhucarp.core.Instance;
@@ -10,13 +9,13 @@ import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
 import gphhucarp.decisionprocess.reactive.event.ReactiveEvent;
-import gphhucarp.decisionprocess.reactive.event.ReactiveRefillEvent;
-import gphhucarp.decisionprocess.reactive.event.ReactiveServingEvent;
 import gphhucarp.decisionprocess.reactive.event.StaticEvent;
 import gphhucarp.representation.route.NodeSeqRoute;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This is the same as ReactiveRefillEvent, but interact with other pilot search events.
@@ -62,11 +61,11 @@ public class PilotSearchRefillEvent extends ReactiveEvent {
             ReactiveDecisionSituation rds = new ReactiveDecisionSituation(
                     pool, route, state);
 
-            Arc nextTask = policy.next(rds, decisionProcess);
-            route.setNextTask(nextTask);
+            if(!route.hasNextTask()) route.setNextTaskChain(policy.next(rds,decisionProcess), state);
+            Arc nextTask = route.getNextTask();
 
             if(nextTask == null) {
-                route.setNextTask(instance.getDepotLoop());
+                route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()), state);
                 route.setStatic();
                 decisionProcess.getEventQueue().add(
                         new StaticEvent(route.getCost(), route));

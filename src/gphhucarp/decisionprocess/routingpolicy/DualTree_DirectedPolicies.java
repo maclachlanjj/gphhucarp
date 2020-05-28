@@ -15,6 +15,8 @@ import gputils.DoubleData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DualTree_DirectedPolicies extends DualTree_GPRoutingPolicy {
 
@@ -35,7 +37,7 @@ public class DualTree_DirectedPolicies extends DualTree_GPRoutingPolicy {
     }
 
     @Override
-    public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp) {
+    public List<Arc> next(ReactiveDecisionSituation rds, DecisionProcess dp) {
         List<Arc> pool = rds.getPool();
         NodeSeqRoute route = rds.getRoute();
         DecisionProcessState state = rds.getState();
@@ -55,11 +57,13 @@ public class DualTree_DirectedPolicies extends DualTree_GPRoutingPolicy {
         List<Double> tree0Vals = new ArrayList<>();
         List<Double> tree1Vals = new ArrayList<>();
 
+        List<Arc> seq;
         for(int i = 0; i < filteredPool.size(); i++){
             Arc tmp = filteredPool.get(i);
+            seq = Stream.of(tmp).collect(Collectors.toList());
 
             calcPrioProb =
-                    new CalcPriorityProblem(tmp, route, state);
+                    new CalcPriorityProblem(seq, route, state);
 
             trees[0].child.eval(null, 0, tmpData0, null, null, calcPrioProb);
             trees[1].child.eval(null, 0, tmpData1, null, null, calcPrioProb);
@@ -91,6 +95,6 @@ public class DualTree_DirectedPolicies extends DualTree_GPRoutingPolicy {
         // select the best normalised instance
         double best = Collections.min(actPriorities);
         int index = actPriorities.indexOf(best);
-        return filteredPool.get(index);
+        return Stream.of(filteredPool.get(index)).collect(Collectors.toList());
     }
 }

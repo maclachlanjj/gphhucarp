@@ -25,9 +25,10 @@ public class FullnessAfterService1 extends FeatureGPNode {
 
     @Override
     public double value(CalcPriorityProblem calcPriorityProblem) {
-        Arc candidate = calcPriorityProblem.getCandidate();
+        List<Arc> candidate = calcPriorityProblem.getCandidate();
+        Arc firstInChain = candidate.get(0);
 
-        if (candidate.equals(calcPriorityProblem.getState().getInstance().getDepotLoop()))
+        if (firstInChain.equals(calcPriorityProblem.getState().getInstance().getDepotLoop()))
             return 0;
 
         DecisionProcessState state = calcPriorityProblem.getState();
@@ -36,22 +37,22 @@ public class FullnessAfterService1 extends FeatureGPNode {
         int currNode = calcPriorityProblem.getRoute().currNode();
         int depot = instance.getDepot();
 
-        if (state.getRouteAdjacencyList(candidate).isEmpty())
+        if (state.getRouteAdjacencyList(firstInChain).isEmpty())
             return Double.POSITIVE_INFINITY;
 
         NodeSeqRoute route1 = null;
 
-        for (int i = 0; i < state.getRouteAdjacencyList(candidate).size(); i++) {
-            route1 = state.getRouteAdjacencyList(candidate).get(i);
+        for (int i = 0; i < state.getRouteAdjacencyList(firstInChain).size(); i++) {
+            route1 = state.getRouteAdjacencyList(firstInChain).get(i);
 
             // whether the alternative is feasible or not
-            if (route1.getDemand() + candidate.getExpectedDemand() <= route1.getCapacity()) {
+            if (route1.getDemand() + firstInChain.getExpectedDemand() <= route1.getCapacity()) {
                 // yes, feasible
                 break;
             }
-            else if (graph.getEstDistance(currNode, candidate.getFrom()) ==
+            else if (graph.getEstDistance(currNode, firstInChain.getFrom()) ==
                     graph.getEstDistance(currNode, depot) +
-                            graph.getEstDistance(depot, candidate.getFrom())) {
+                            graph.getEstDistance(depot, firstInChain.getFrom())) {
                 // pass depot, so can refill on the way
                 break;
             }
@@ -61,13 +62,59 @@ public class FullnessAfterService1 extends FeatureGPNode {
         if (route1 == null)
             return Double.POSITIVE_INFINITY;
 
-        if (graph.getEstDistance(currNode, candidate.getFrom()) ==
+        if (graph.getEstDistance(currNode, firstInChain.getFrom()) ==
                 graph.getEstDistance(currNode, depot) +
-                        graph.getEstDistance(depot, candidate.getFrom())) {
-            return candidate.getExpectedDemand() / route1.getCapacity();
+                        graph.getEstDistance(depot, firstInChain.getFrom())) {
+            return firstInChain.getExpectedDemand() / route1.getCapacity();
         }
         else {
-            return (route1.getDemand() + candidate.getExpectedDemand()) / route1.getCapacity();
+            return (route1.getDemand() + firstInChain.getExpectedDemand()) / route1.getCapacity();
         }
+
+        // original
+//        Arc candidate = calcPriorityProblem.getCandidate();
+//
+//        if (candidate.equals(calcPriorityProblem.getState().getInstance().getDepotLoop()))
+//            return 0;
+//
+//        DecisionProcessState state = calcPriorityProblem.getState();
+//        Instance instance = state.getInstance();
+//        Graph graph = instance.getGraph();
+//        int currNode = calcPriorityProblem.getRoute().currNode();
+//        int depot = instance.getDepot();
+//
+//        if (state.getRouteAdjacencyList(candidate).isEmpty())
+//            return Double.POSITIVE_INFINITY;
+//
+//        NodeSeqRoute route1 = null;
+//
+//        for (int i = 0; i < state.getRouteAdjacencyList(candidate).size(); i++) {
+//            route1 = state.getRouteAdjacencyList(candidate).get(i);
+//
+//            // whether the alternative is feasible or not
+//            if (route1.getDemand() + candidate.getExpectedDemand() <= route1.getCapacity()) {
+//                // yes, feasible
+//                break;
+//            }
+//            else if (graph.getEstDistance(currNode, candidate.getFrom()) ==
+//                    graph.getEstDistance(currNode, depot) +
+//                            graph.getEstDistance(depot, candidate.getFrom())) {
+//                // pass depot, so can refill on the way
+//                break;
+//            }
+//        }
+//
+//        // no alternative route is feasible
+//        if (route1 == null)
+//            return Double.POSITIVE_INFINITY;
+//
+//        if (graph.getEstDistance(currNode, candidate.getFrom()) ==
+//                graph.getEstDistance(currNode, depot) +
+//                        graph.getEstDistance(depot, candidate.getFrom())) {
+//            return candidate.getExpectedDemand() / route1.getCapacity();
+//        }
+//        else {
+//            return (route1.getDemand() + candidate.getExpectedDemand()) / route1.getCapacity();
+//        }
     }
 }

@@ -7,6 +7,9 @@ import gphhucarp.decisionprocess.DecisionProcess;
 import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * The collaborative refill-then-serve event occurs after a route failure occurs.
  * The vehicle is on the way back to the depot to refill, and then coming back
@@ -25,7 +28,7 @@ public class CollaborativeRefillThenServeEvent extends CollaborativeEvent {
                                              NodeSeqRoute route, Arc nextTask) {
         super(time);
         this.route = route;
-        route.setNextTask(nextTask);
+        route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()));
     }
 
     @Override

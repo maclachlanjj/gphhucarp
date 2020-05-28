@@ -9,12 +9,10 @@ import gphhucarp.decisionprocess.DecisionProcessEvent;
 import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
-import gphhucarp.representation.Solution;
 import gphhucarp.representation.route.NodeSeqRoute;
-import gphhucarp.representation.route.TaskSeqRoute;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This is the same as ReactiveRefillEvent, but interact with other pilot search events.
@@ -24,6 +22,15 @@ public class PilotSearchRefillEvent extends DecisionProcessEvent {
 
     private NodeSeqRoute route;
     private PilotSearcher pilotSearcher;
+
+    public PilotSearchRefillEvent(double time, NodeSeqRoute route,
+                                  PilotSearcher pilotSearcher, Arc nextTask) {
+        super(time);
+        this.route = route;
+        this.pilotSearcher = pilotSearcher;
+
+        route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()));
+    }
 
     public PilotSearchRefillEvent(double time, NodeSeqRoute route,
                                   PilotSearcher pilotSearcher) {
@@ -66,7 +73,7 @@ public class PilotSearchRefillEvent extends DecisionProcessEvent {
             }
 
             state.removeUnassignedTasks(nextTask);
-            route.setNextTask(nextTask);
+            route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()), state);
 
             decisionProcess.getEventQueue().add(
                     new PilotSearchServingEvent(route.getCost(), route, nextTask, pilotSearcher));

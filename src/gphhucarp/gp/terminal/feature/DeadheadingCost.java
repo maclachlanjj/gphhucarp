@@ -1,5 +1,6 @@
 package gphhucarp.gp.terminal.feature;
 
+import gphhucarp.core.Arc;
 import gphhucarp.gp.CalcPriorityProblem;
 import gphhucarp.gp.terminal.FeatureGPNode;
 
@@ -16,6 +17,13 @@ public class DeadheadingCost extends FeatureGPNode {
 
     @Override
     public double value(CalcPriorityProblem calcPriorityProblem) {
-        return calcPriorityProblem.getCandidate().getExpectedDeadheadingCost();
+        double res = 0;
+        for(Arc a: calcPriorityProblem.getCandidate())
+            res += a.getExpectedDeadheadingCost();
+
+        return res;
+
+        // original
+//        return calcPriorityProblem.getCandidate().getExpectedDeadheadingCost();
     }
 }

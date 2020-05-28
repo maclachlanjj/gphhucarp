@@ -11,6 +11,8 @@ import gphhucarp.gp.CalcPriorityProblem;
 import gphhucarp.representation.route.NodeSeqRoute;
 import gputils.DoubleData;
 
+import java.util.List;
+
 /**
  * A wrapper class to allow for clearer definition of more RoutingPolicies
  *
@@ -57,9 +59,9 @@ public abstract class GPRoutingPolicy_frame extends RoutingPolicy {
     }
 
     @Override
-    public double priority(Arc candidate, NodeSeqRoute route, DecisionProcessState state) {
+    public double priority(List<Arc> chain, NodeSeqRoute route, DecisionProcessState state) {
         CalcPriorityProblem calcPrioProb =
-                new CalcPriorityProblem(candidate, route, state);
+                new CalcPriorityProblem(chain, route, state);
 
         DoubleData tmp = new DoubleData();
         gpTrees[0].child.eval(null, 0, tmp, null, null, calcPrioProb);

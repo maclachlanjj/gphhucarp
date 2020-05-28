@@ -1,5 +1,6 @@
 package gphhucarp.gp.terminal.feature;
 
+import gphhucarp.core.Arc;
 import gphhucarp.gp.CalcPriorityProblem;
 import gphhucarp.gp.terminal.FeatureGPNode;
 
@@ -16,6 +17,12 @@ public class Demand extends FeatureGPNode {
 
     @Override
     public double value(CalcPriorityProblem calcPriorityProblem) {
-        return calcPriorityProblem.getCandidate().getExpectedDemand();
+        double res = 0;
+        for(Arc a: calcPriorityProblem.getCandidate())
+            res += a.getExpectedDemand();
+        return res;
+
+        // original
+//        return calcPriorityProblem.getCandidate().getExpectedDemand();
     }
 }

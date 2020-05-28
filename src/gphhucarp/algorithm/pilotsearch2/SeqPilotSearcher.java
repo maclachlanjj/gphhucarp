@@ -17,7 +17,10 @@ import gphhucarp.decisionprocess.routingpolicy.GPRoutingPolicy;
 import gphhucarp.decisionprocess.routingpolicy.GPRoutingPolicy_frame;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The sequential pilot searcher starts from the current decision state,
@@ -32,7 +35,7 @@ public class SeqPilotSearcher extends GPRoutingPolicy_frame {
         super(poolFilter, gpTrees);
     }
 
-    public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp) {
+    public List<Arc> next(ReactiveDecisionSituation rds, DecisionProcess dp) {
         double startTime = System.currentTimeMillis();
         GPRoutingPolicy_frame original_policy = (GPRoutingPolicy_frame) dp.getRoutingPolicy(); // this is a SeqPilotSearcher policy <-- we don't want an infinite loop of these
         RoutingPolicy policy = new GPRoutingPolicy(original_policy.getPoolFilter(), original_policy.getGPTrees());
@@ -90,7 +93,7 @@ public class SeqPilotSearcher extends GPRoutingPolicy_frame {
         sumDecisionTime += endTime - startTime; numDecisions++;
 
         if(route.getNextTask().getFrom() == depot && route.getNextTask().getTo() == depot) return null;
-        return route.getNextTask();
+        return Stream.of(route.getNextTask()).collect(Collectors.toList());
     }
 
     @Override

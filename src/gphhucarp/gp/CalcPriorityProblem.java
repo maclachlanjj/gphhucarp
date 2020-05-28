@@ -8,6 +8,8 @@ import gphhucarp.core.Arc;
 import gphhucarp.representation.route.NodeSeqRoute;
 import gphhucarp.decisionprocess.DecisionProcessState;
 
+import java.util.List;
+
 /**
  * The problem for calculating the priority of a candidate task.
  *
@@ -15,11 +17,11 @@ import gphhucarp.decisionprocess.DecisionProcessState;
  */
 public class CalcPriorityProblem extends Problem implements SimpleProblemForm {
 
-    private Arc candidate;
+    private List<Arc> candidate;
     private NodeSeqRoute route;
     private DecisionProcessState state;
 
-    public CalcPriorityProblem(Arc candidate,
+    public CalcPriorityProblem(List<Arc> candidate,
                                NodeSeqRoute route,
                                DecisionProcessState state) {
         this.candidate = candidate;
@@ -27,7 +29,7 @@ public class CalcPriorityProblem extends Problem implements SimpleProblemForm {
         this.state = state;
     }
 
-    public Arc getCandidate() {
+    public List<Arc> getCandidate() {
         return candidate;
     }
 

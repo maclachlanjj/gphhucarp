@@ -20,12 +20,12 @@ import gphhucarp.representation.route.TaskSeqRoute;
 
 public class ReactiveRefillThenServeEvent extends ReactiveEvent {
 
-    private Arc nextTask;
+//    private Arc nextTask;
 
     public ReactiveRefillThenServeEvent(double time,
                                         NodeSeqRoute route, Arc nextTask) {
         super(time, route);
-        this.nextTask = nextTask;
+//        this.nextTask = nextTask;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ReactiveRefillThenServeEvent extends ReactiveEvent {
             // now going back to continue the failed service
             // this is essentially a reactive serving event
             decisionProcess.getEventQueue().add(
-                    new ReactiveServingEvent(route.getCost(), route, nextTask));
+                    new ReactiveServingEvent(route.getCost(), route));
         }
         else {
             // continue going to the depot if not arrived yet
@@ -71,12 +71,12 @@ public class ReactiveRefillThenServeEvent extends ReactiveEvent {
             route.add(nextNode, 0, instance);
             // add a new event
             decisionProcess.getEventQueue().add(
-                    new ReactiveRefillThenServeEvent(route.getCost(), route, nextTask));
+                    new ReactiveRefillThenServeEvent(route.getCost(), route, route.getNextTask()));
         }
     }
 
     @Override
     public DecisionProcessEvent deepClone(NodeSeqRoute route) {
-        return new ReactiveRefillThenServeEvent(this.time, route, this.nextTask);
+        return new ReactiveRefillThenServeEvent(this.time, route, route.getNextTask());
     }
 }

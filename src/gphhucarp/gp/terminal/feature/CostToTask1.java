@@ -19,16 +19,32 @@ public class CostToTask1 extends FeatureGPNode {
 
     @Override
     public double value(CalcPriorityProblem calcPriorityProblem) {
-        Arc candidate = calcPriorityProblem.getCandidate();
+        List<Arc> candidate = calcPriorityProblem.getCandidate();
+
+        Arc firstInChain = candidate.get(0);
 
         List<Arc> taskAdjacentList = calcPriorityProblem.getState()
-                .getTaskAdjacencyList(candidate);
+                .getTaskAdjacencyList(firstInChain);
 
         if (taskAdjacentList.isEmpty())
             return 0;
 
         Arc task1 = taskAdjacentList.get(0);
 
-        return calcPriorityProblem.getState().getInstance().getGraph().getEstDistance(candidate, task1);
+        return calcPriorityProblem.getState().getInstance().getGraph().getEstDistance(firstInChain, task1);
+
+
+        // original
+//        Arc candidate = calcPriorityProblem.getCandidate();
+//
+//        List<Arc> taskAdjacentList = calcPriorityProblem.getState()
+//                .getTaskAdjacencyList(candidate);
+//
+//        if (taskAdjacentList.isEmpty())
+//            return 0;
+//
+//        Arc task1 = taskAdjacentList.get(0);
+//
+//        return calcPriorityProblem.getState().getInstance().getGraph().getEstDistance(candidate, task1);
     }
 }

@@ -11,6 +11,8 @@ import gphhucarp.decisionprocess.poolfilter.ExpFeasiblePoolFilter;
 import gphhucarp.decisionprocess.tiebreaker.SimpleTieBreaker;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.List;
+
 /**
  * The path scanning 4 policy first selects the nearest neighbours.
  * Among multiple nearest neighbours,
@@ -35,11 +37,11 @@ public class PathScanning4Policy extends RoutingPolicy {
     }
 
     @Override
-    public double priority(Arc candidate, NodeSeqRoute route, DecisionProcessState state) {
+    public double priority(List<Arc> candidate, NodeSeqRoute route, DecisionProcessState state) {
         Instance instance = state.getInstance();
         Graph graph = instance.getGraph();
-        double costFromHere = graph.getEstDistance(route.currNode(), candidate.getFrom());
-        double yield = state.getInstance().getActDemand(candidate) / candidate.getServeCost();
+        double costFromHere = graph.getEstDistance(route.currNode(), candidate.get(0).getFrom());
+        double yield = state.getInstance().getActDemand(candidate.get(0)) / candidate.get(0).getServeCost();
 
         return ALPHA * costFromHere + yield;
     }

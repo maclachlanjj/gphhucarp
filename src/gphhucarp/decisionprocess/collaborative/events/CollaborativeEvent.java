@@ -5,10 +5,11 @@ import gphhucarp.core.Graph;
 import gphhucarp.core.Instance;
 import gphhucarp.decisionprocess.*;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
-import gphhucarp.decisionprocess.routingpolicy.VehicleEvaluator_RoutingPolicy;
 import gphhucarp.representation.route.NodeSeqRoute;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class CollaborativeEvent extends DecisionProcessEvent {
 	public CollaborativeEvent(double time){ super(time); }
@@ -44,12 +45,10 @@ public abstract class CollaborativeEvent extends DecisionProcessEvent {
 		// calculate the route-to-task map
 		state.calcRouteToTaskMap(route);
 
-//		if(policy instanceof VehicleEvaluator_RoutingPolicy)
-//			((VehicleEvaluator_RoutingPolicy) policy).updateMatrix(state.getUnassignedTasks(), state);
-////			((VehicleEvaluator_RoutingPolicy) policy).clearThenUpdateMatrix(route, route.getQueuedTasks(), state);
-
 		ReactiveDecisionSituation rds = new ReactiveDecisionSituation(state.getUnassignedTasks(), route, state);
-		Arc nextTask = policy.next(rds, decisionProcess);
+
+		if(!route.hasNextTask()) route.setNextTaskChain(policy.next(rds,decisionProcess), state);
+		Arc nextTask = route.getNextTask();
 
 		nextTaskCheck(decisionProcess,nextTask,route);
 	}
@@ -60,13 +59,13 @@ public abstract class CollaborativeEvent extends DecisionProcessEvent {
 
 		if (nextTask == null || (nextTask.getFrom() == 1 && nextTask.getTo() == 1)) {
 			// go back to refill if there is no feasible task to serve next
-			route.setNextTask(state.getInstance().getDepotLoop());
+			route.setNextTaskChain(Stream.of(state.getInstance().getDepotLoop()).collect(Collectors.toList()), state);
 			decisionProcess.getEventQueue().add(
 					new CollaborativeRefillEvent(route.getCost(), route));
 		}
 		else {
 			// assigning the next task
-			route.setNextTask(nextTask);
+			route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()), state);
 			state.removeUnassignedTasks(nextTask);
 			decisionProcess.getEventQueue().add(
 					new CollaborativeServingEvent(route.getCost(), route, nextTask));

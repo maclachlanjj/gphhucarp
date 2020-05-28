@@ -302,12 +302,13 @@ public class GPInitializer extends SimpleInitializer
             
         // set our constraints array up
         Enumeration e = treeConstraintRepository.elements();
-        while(e.hasMoreElements())
-            {
-            GPTreeConstraints c = (GPTreeConstraints)(e.nextElement());
+        while(e.hasMoreElements()) {
+            GPTreeConstraints c = (GPTreeConstraints) (e.nextElement());
             c.constraintNumber = numTreeConstraints;
             treeConstraints[numTreeConstraints] = c;
             numTreeConstraints++;
             }
         }
+
+
     }

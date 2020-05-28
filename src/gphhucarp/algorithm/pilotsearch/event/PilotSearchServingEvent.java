@@ -9,9 +9,10 @@ import gphhucarp.decisionprocess.DecisionProcessEvent;
 import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
-import gphhucarp.representation.Solution;
 import gphhucarp.representation.route.NodeSeqRoute;
-import gphhucarp.representation.route.TaskSeqRoute;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This event is almost the same as ReactiveServingEvent.java.
@@ -94,14 +95,14 @@ public class PilotSearchServingEvent extends DecisionProcessEvent {
 
             if (nextTask == null || nextTask.equals(instance.getDepotLoop())) {
                 // go back to the depot to refill, if the depot loop is selected
-                route.setNextTask(instance.getDepotLoop());
+                route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()), state);
 
                 decisionProcess.getEventQueue().add(
                         new PilotSearchRefillEvent(route.getCost(), route, pilotSearcher));
             }
             else {
                 state.removeUnassignedTasks(nextTask);
-                route.setNextTask(nextTask);
+                route.setNextTaskChain(Stream.of(nextTask).collect(Collectors.toList()), state);
                 decisionProcess.getEventQueue().add(
                         new PilotSearchServingEvent(route.getCost(), route, nextTask, pilotSearcher));
             }

@@ -13,6 +13,8 @@ import gphhucarp.representation.route.NodeSeqRoute;
 import gputils.DoubleData;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MatrixEvaluator extends DualTree_GPRoutingPolicy {
 
@@ -46,7 +48,8 @@ public class MatrixEvaluator extends DualTree_GPRoutingPolicy {
         for(NodeSeqRoute r: R){
             ArrayList<Tuple> routeQueue = new ArrayList<>();
             for(Arc a: U){
-                calcPrioProb = new CalcPriorityProblem(a, r, state);
+                List<Arc> l = new ArrayList<>(); l.add(a);
+                calcPrioProb = new CalcPriorityProblem(l, r, state);
                 trees[1].child.eval(null, 0, data, null, null, calcPrioProb);
                 routeQueue.add(new Tuple(a, data.value));
             }
@@ -180,31 +183,42 @@ public class MatrixEvaluator extends DualTree_GPRoutingPolicy {
     }
 
     @Override
-    public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp){
+    public List<Arc> next(ReactiveDecisionSituation rds, DecisionProcess dp){
+        double startTime = System.currentTimeMillis();
         NodeSeqRoute r = rds.getRoute();
         DecisionProcessState state = rds.getState();
 
         updateMatrix(state.getUnassignedTasks(), dp);
 
+        // why candidateSubsets.get(r)?
+//        ArrayList<Arc> pool = new ArrayList<>(candidateSubsets.get(r));
+
+        // not: state.getUnassignedTasks() + candidateSubsets.get(r)
         ArrayList<Arc> pool = new ArrayList<>(candidateSubsets.get(r));
+        pool.addAll(state.getUnassignedTasks());
 
         List<Arc> filteredPool = poolFilter.filter(pool, r, state);
 
         if (filteredPool.isEmpty())
             return null;
 
-        Arc next = filteredPool.get(0);
-        next.setPriority(priority(next, r, state));
+        priorities = new HashMap<>();
+
+        List<Arc> next = Stream.of(filteredPool.get(0)).collect(Collectors.toList());
+        priorities.put(next, priority(next, r, state));
 
         for (int i = 1; i < filteredPool.size(); i++) {
-            Arc tmp = filteredPool.get(i);
-            tmp.setPriority(priority(tmp, r, state));
+            List<Arc> tmp = Stream.of(filteredPool.get(i)).collect(Collectors.toList());
+            priorities.put(tmp, priority(tmp, r, state));
 
-            if (Double.compare(tmp.getPriority(), next.getPriority()) < 0 ||
-                    (Double.compare(tmp.getPriority(), next.getPriority()) == 0 &&
+            if (Double.compare(priorities.get(tmp), priorities.get(next)) < 0 ||
+                    (Double.compare(priorities.get(tmp), priorities.get(next)) == 0 &&
                             tieBreaker.breakTie(tmp, next) < 0))
                 next = tmp;
         }
+
+        double totalTime = System.currentTimeMillis() - startTime;
+        sumDecisionTime += totalTime; numDecisions++;
 
         return next;
     }

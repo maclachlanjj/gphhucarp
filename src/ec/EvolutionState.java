@@ -376,7 +376,6 @@ public class EvolutionState implements Singleton
         p=new Parameter(P_QUITONRUNCOMPLETE);
         quitOnRunComplete = parameters.getBoolean(p,null,false);
 
-
         /* Set up the singletons */
         p=new Parameter(P_INITIALIZER);
         initializer = (Initializer)
@@ -402,12 +401,12 @@ public class EvolutionState implements Singleton
         statistics = (Statistics)
             (parameters.getInstanceForParameterEq(p,null,Statistics.class));
         statistics.setup(this,p);
-        
+
         p=new Parameter(P_EXCHANGER);
         exchanger = (Exchanger)
             (parameters.getInstanceForParameter(p,null,Exchanger.class));
         exchanger.setup(this,p);
-                
+
         generation = 0;
         }
 

@@ -30,17 +30,13 @@ public class NodeSeqRoute extends Route {
     private boolean activeRefill = false;
 
     // fields used during the decision process
-    private Arc nextTask; // the next task to serve (depot loop if refilling)
-
-    // only (currently) used in VehicleEvaluator
-    private PriorityQueue<Arc> taskQueue;
+    private List<Arc> nextTaskChain; // the next task(s) to serve (depot loop if refilling). index 0 is next task
 
     public NodeSeqRoute(double capacity, double demand, double cost,
                         List<Integer> nodeSequence, List<Double> fracSequence) {
         super(capacity, demand, cost);
         this.nodeSequence = nodeSequence;
         this.fracSequence = fracSequence;
-        this.taskQueue = new PriorityQueue<>(Comparator.comparingDouble(Arc::getPriority)); // this is awesome notation
         this.hasStopped = false;
     }
 
@@ -60,38 +56,31 @@ public class NodeSeqRoute extends Route {
         return nodeSequence.get(index);
     }
 
-    public double getFraction(int index) {
-        return fracSequence.get(index);
+    public double getFraction(int index) { return fracSequence.get(index); }
+
+    private int taskIndex;
+
+    public void setNextTaskChain(List<Arc> chain) {
+        this.nextTaskChain = chain;
+        taskIndex = 0;
     }
 
-    public Arc getNextTask() { return nextTask; }
-
-    public void setNextTask(Arc nextTask) {
-        this.nextTask = nextTask;
+    public void setNextTaskChain(List<Arc> chain, DecisionProcessState state) {
+        if(chain != null)
+            for(Arc a: chain)
+                state.removeUnassignedTasks(a);
+        this.nextTaskChain = chain;
+        taskIndex = 0;
     }
 
-    public void addTaskToQueue(Arc a){
-        taskQueue.add(a);
-    }
+    public Arc getNextTask() { if(nextTaskChain == null) return null; return nextTaskChain.get(taskIndex); }
 
-    public boolean hasNextTask(){ return taskQueue.size() > 0; }
+    // called when the current task in the chain is completed.
+    public void stepUpChain() { if(taskIndex < nextTaskChain.size()-1) taskIndex++; }
 
-    public Arc pollNextTask(){
-        return taskQueue.poll();
-    }
-
-    public Arc peekNextTask(){
-        return taskQueue.peek();
-    }
-
-    public List<Arc> getQueuedTasks(){ return new ArrayList<>(taskQueue); }
-
-    public void removeAllFromQueue(List<Arc> set) { taskQueue.removeAll(set); }
-
-    public void removeFromQueue(Arc a){ taskQueue.remove(a); }
-
-    public void clearTaskQueue(){
-        taskQueue.clear();
+    public boolean hasNextTask() {
+        Arc next = nextTaskChain.get(taskIndex);
+        return (taskIndex < nextTaskChain.size()-1) && !(next.getFrom() == 1 && next.getTo() == 1);
     }
 
     public void setStatic(){
@@ -237,8 +226,14 @@ public class NodeSeqRoute extends Route {
     public boolean equals(Object o1){
         NodeSeqRoute other = (NodeSeqRoute) o1;
 
-        if(this.nextTask.compareTo(other.nextTask) != 0)
-            return false;
+        if(this.nextTaskChain.size() != other.nextTaskChain.size()) return false;
+
+        for(int i = 0; i < nextTaskChain.size(); i++)
+            if (this.nextTaskChain.get(i).compareTo(other.nextTaskChain.get(i)) != 0)
+                return false;
+
+//        if(this.nextTask.compareTo(other.nextTask) != 0)
+//            return false;
 
         if(nodeSequence.size() != other.nodeSequence.size())
             return false;
@@ -268,7 +263,9 @@ public class NodeSeqRoute extends Route {
         List<Double> clonedFracSeq = new LinkedList<>(fracSequence);
 
         NodeSeqRoute cloned = new NodeSeqRoute(capacity, demand, cost, clonedNodeSeq, clonedFracSeq);
-        cloned.setNextTask(nextTask);
+
+        cloned.nextTaskChain = new ArrayList<>(nextTaskChain);
+        cloned.taskIndex = taskIndex;
 
         return cloned;
     }

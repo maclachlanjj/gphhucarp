@@ -7,7 +7,10 @@ import gphhucarp.decisionprocess.routingpolicy.ensemble.Combiner;
 import gphhucarp.decisionprocess.routingpolicy.ensemble.EnsemblePolicy;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The majority voter selects the next candidate by majority voting.
@@ -18,22 +21,24 @@ import java.util.List;
 public class MajorityVoter extends Combiner {
 
     @Override
-    public Arc next(List<Arc> pool, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy) {
+    public List<Arc> next(List<Arc> pool, NodeSeqRoute route, DecisionProcessState state, EnsemblePolicy ensemblePolicy) {
         int[] votes = new int[pool.size()];
 
         for (int ele = 0; ele < ensemblePolicy.size(); ele++) {
             RoutingPolicy policy = ensemblePolicy.getPolicy(ele);
 
+            HashMap<List<Arc>, Double> priorities = new HashMap<>();
+
             int bestIdx = 0;
-            Arc best = pool.get(bestIdx);
-            best.setPriority(policy.priority(best, route, state));
+            List<Arc> best = Stream.of(pool.get(bestIdx)).collect(Collectors.toList());
+            priorities.put(best, policy.priority(best, route, state));
 
             for (int i = 1; i < pool.size(); i++) {
-                Arc tmp = pool.get(i);
-                tmp.setPriority(policy.priority(tmp, route, state));
+                List<Arc> tmp = Stream.of(pool.get(i)).collect(Collectors.toList());
+                priorities.put(tmp, policy.priority(tmp, route, state));
 
-                if (Double.compare(tmp.getPriority(), best.getPriority()) < 0 ||
-                        (Double.compare(tmp.getPriority(), best.getPriority()) == 0 &&
+                if (Double.compare(priorities.get(tmp), priorities.get(best)) < 0 ||
+                        (Double.compare(priorities.get(tmp), priorities.get(best)) == 0 &&
                                 policy.getTieBreaker().breakTie(tmp, best) < 0)) {
                     bestIdx = i;
                     best = tmp;
@@ -53,6 +58,6 @@ public class MajorityVoter extends Combiner {
             }
         }
 
-        return next;
+        return Stream.of(next).collect(Collectors.toList());
     }
 }

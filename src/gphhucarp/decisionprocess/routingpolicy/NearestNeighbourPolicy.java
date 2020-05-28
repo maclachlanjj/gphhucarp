@@ -9,6 +9,8 @@ import gphhucarp.decisionprocess.DecisionProcessState;
 import gphhucarp.decisionprocess.PoolFilter;
 import gphhucarp.decisionprocess.RoutingPolicy;
 
+import java.util.List;
+
 /**
  * The nearest neighbour policy always selects the nearest neighbour.
  * The priority is set to the distance from the current node to the head node of the candidate.
@@ -32,7 +34,7 @@ public class NearestNeighbourPolicy extends RoutingPolicy {
     }
 
     @Override
-    public double priority(Arc candidate, NodeSeqRoute route, DecisionProcessState state) {
-        return state.getInstance().getGraph().getEstDistance(route.currNode(), candidate.getFrom());
+    public double priority(List<Arc> chain, NodeSeqRoute route, DecisionProcessState state) {
+        return state.getInstance().getGraph().getEstDistance(route.currNode(), chain.get(0).getFrom());
     }
 }

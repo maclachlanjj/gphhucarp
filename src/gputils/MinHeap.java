@@ -6,6 +6,10 @@ import gphhucarp.decisionprocess.tiebreaker.SimpleTieBreaker;
 import org.apache.commons.math3.stat.ranking.TiesStrategy;
 import sun.java2d.pipe.SpanShapeRenderer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * Mostly from: https://www.geeksforgeeks.org/min-heap-in-java/
  *
@@ -118,8 +122,10 @@ public class MinHeap {
         Arc resArc = null;
         for(int i = 0; i < Heap.length; i++){
             Arc arc = Heap[i];
+            List<Arc> c1 = Stream.of(arc).collect(Collectors.toList());
+            List<Arc> c2 = Stream.of(element).collect(Collectors.toList());
             if(arc != null && (Double.compare(arc.getPriority(), elementPriority) > 0 ||
-                    Double.compare(arc.getPriority(), elementPriority) == 0 && tb.breakTie(arc, element) < 0)){
+                    Double.compare(arc.getPriority(), elementPriority) == 0 && tb.breakTie(c1, c2) < 0)){
                 if(resArc == null || Double.compare(arc.getPriority(), resArc.getPriority()) > 0) {
                     resArc = arc; res = i;
                 }

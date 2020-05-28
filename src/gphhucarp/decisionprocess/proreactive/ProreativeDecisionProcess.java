@@ -32,7 +32,7 @@ public class ProreativeDecisionProcess extends DecisionProcess {
         eventQueue.clear();
         for (int i = 0; i < plan.getRoutes().size(); i++)
             eventQueue.add(new ProreactiveServingEvent(0,
-                    state.getSolution().getRoute(i), plan.getRoute(i), 0));
+                    state.getSolution().getRoute(i), plan.getRoute(i), state.getInstance().getDepotLoop()));
     }
 
     @Override

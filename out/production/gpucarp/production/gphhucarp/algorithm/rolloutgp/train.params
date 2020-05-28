@@ -216,7 +216,7 @@ gp.fs.0.func.7.nc = nc3
 
 eval.problem = gphhucarp.gp.ReactiveGPHHProblem
 eval.problem.pool-filter = gphhucarp.decisionprocess.poolfilter.ExpFeasibleNoRefillPoolFilter
-eval.problem.tie-breaker = gphhucarp.decisionprocess.tiebreaker.SimpleTieBreaker
+eval.problem.tie-breaker = gphhucarp.decisionprocess.tiebreaker.ChainTieBreaker
 
 # whether to record information about the current run
     eval.problem.routing-policy.record-data = false
@@ -232,7 +232,7 @@ eval.problem.tie-breaker = gphhucarp.decisionprocess.tiebreaker.SimpleTieBreaker
     # if the original route's remaining capacity (ratio) is above this value, the branch to the depot is not searched.
         eval.problem.routing-policy.rollout-depotThreshold = 1
     # whether or not to skip creating n resampled clones per action, and instead create one exact clone, and use the estimated demand/deadheading values.
-        eval.problem.routing-policy.rollout-useEstimatedValues = true
+        eval.problem.routing-policy.rollout-useEstimatedValues = false
 
 eval.problem.data = gputils.DoubleData
 eval.problem.eval-model = gphhucarp.gp.evaluation.ReactiveEvaluationModel

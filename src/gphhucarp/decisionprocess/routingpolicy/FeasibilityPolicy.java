@@ -7,6 +7,8 @@ import gphhucarp.decisionprocess.PoolFilter;
 import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.decisionprocess.poolfilter.IdentityPoolFilter;
 
+import java.util.List;
+
 /**
  * The feasibility proreactive policy checks the expected demand of the candidate.
  * If the expected demand does not exceed the remaining capacity, then continue the ervice.
@@ -24,7 +26,7 @@ public class FeasibilityPolicy extends RoutingPolicy {
     }
 
     @Override
-    public double priority(Arc candidate, NodeSeqRoute route, DecisionProcessState state) {
-        return route.getCapacity() - route.getDemand() - candidate.getExpectedDemand();
+    public double priority(List<Arc> candidate, NodeSeqRoute route, DecisionProcessState state) {
+        return route.getCapacity() - route.getDemand() - candidate.get(0).getExpectedDemand();
     }
 }

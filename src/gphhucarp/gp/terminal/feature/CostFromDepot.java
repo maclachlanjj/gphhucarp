@@ -6,6 +6,8 @@ import gphhucarp.gp.CalcPriorityProblem;
 import gphhucarp.gp.terminal.FeatureGPNode;
 import gphhucarp.representation.route.NodeSeqRoute;
 
+import java.util.List;
+
 /**
  * Feature: the cost from the depot to the head node of the task.
  *
@@ -22,7 +24,13 @@ public class CostFromDepot extends FeatureGPNode {
     public double value(CalcPriorityProblem calcPriorityProblem) {
         Instance instance = calcPriorityProblem.getState().getInstance();
         NodeSeqRoute route = calcPriorityProblem.getRoute();
-        Arc candidate = calcPriorityProblem.getCandidate();
-        return instance.getGraph().getEstDistance(instance.getDepot(), candidate.getFrom());
+        List<Arc> candidate = calcPriorityProblem.getCandidate();
+        return instance.getGraph().getEstDistance(instance.getDepot(), candidate.get(0).getFrom());
+
+        // original:
+//        Instance instance = calcPriorityProblem.getState().getInstance();
+//        NodeSeqRoute route = calcPriorityProblem.getRoute();
+//        Arc candidate = calcPriorityProblem.getCandidate();
+//        return instance.getGraph().getEstDistance(instance.getDepot(), candidate.getFrom());
     }
 }

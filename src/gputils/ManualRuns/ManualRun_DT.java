@@ -9,12 +9,10 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 import gphhucarp.core.Arc;
 import gphhucarp.decisionprocess.PoolFilter;
-import gphhucarp.decisionprocess.TieBreaker;
 import gphhucarp.decisionprocess.poolfilter.collaborative.CollaborativePoolFilter_estimated;
 import gphhucarp.decisionprocess.routingpolicy.GPRoutingPolicy;
 import gphhucarp.decisionprocess.routingpolicy.GPRoutingPolicy_frame;
-import gphhucarp.decisionprocess.routingpolicy.VehicleEvaluator_RoutingPolicy;
-import gphhucarp.decisionprocess.tiebreaker.SimpleTieBreaker;
+import gphhucarp.decisionprocess.routingpolicy.MatrixEvaluator;
 import gphhucarp.gp.ReactiveGPHHProblem;
 import gphhucarp.gp.UCARPPrimitiveSet;
 import gphhucarp.gp.evaluation.EvaluationModel;
@@ -81,7 +79,7 @@ public class ManualRun_DT extends ManualRun {
         /**
          * Must change this to make it specific.
          */
-        mainPolicy = new VehicleEvaluator_RoutingPolicy(mainFilter,
+        mainPolicy = new MatrixEvaluator(mainFilter,
                 trees);
 
         secondaryPolicy = new GPRoutingPolicy(mainFilter,

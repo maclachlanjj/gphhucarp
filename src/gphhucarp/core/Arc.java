@@ -5,8 +5,6 @@ import org.apache.commons.math3.random.RandomDataGenerator;
 import util.random.AbstractRealSampler;
 import util.random.NormalSampler;
 
-import java.util.PriorityQueue;
-
 /**
  * An arc, which is a directed edge of the graph.
  * It has

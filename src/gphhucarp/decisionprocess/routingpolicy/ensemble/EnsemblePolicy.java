@@ -6,6 +6,8 @@ import gphhucarp.decisionprocess.reactive.ReactiveDecisionSituation;
 import gphhucarp.representation.route.NodeSeqRoute;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EnsemblePolicy extends RoutingPolicy {
 
@@ -98,7 +100,7 @@ public class EnsemblePolicy extends RoutingPolicy {
     }
 
     @Override
-    public Arc next(ReactiveDecisionSituation rds, DecisionProcess dp) {
+    public List<Arc> next(ReactiveDecisionSituation rds, DecisionProcess dp) {
         List<Arc> pool = rds.getPool();
         NodeSeqRoute route = rds.getRoute();
         DecisionProcessState state = rds.getState();
@@ -108,7 +110,7 @@ public class EnsemblePolicy extends RoutingPolicy {
         if (filteredPool.isEmpty())
             return null;
 
-        Arc next = combiner.next(pool, route, state, this);
+        List<Arc> next = combiner.next(pool, route, state, this);
 
         return next;
     }
@@ -117,7 +119,7 @@ public class EnsemblePolicy extends RoutingPolicy {
     /**
      * For ensemble routing policies, this function is not used.
      */
-    public double priority(Arc candidate, NodeSeqRoute route, DecisionProcessState state) {
+    public double priority(List<Arc> candidate, NodeSeqRoute route, DecisionProcessState state) {
         return 0;
     }
 }

@@ -78,7 +78,7 @@ public abstract class Evaluator implements Singleton
         p_problem = (Problem)(state.parameters.getInstanceForParameter(
                 base.push(P_PROBLEM),null,Problem.class));
         p_problem.setup(state,base.push(P_PROBLEM));
-        
+
         // Am I a master problem and NOT a slave.  Note that the "eval.i-am-slave" parameter
         // is not set by the user but rather programmatically by the Slave.java class
         if(state.parameters.exists(base.push(P_MASTERPROBLEM),null)) // there's a master problem to load

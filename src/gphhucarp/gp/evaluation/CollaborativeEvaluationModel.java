@@ -11,7 +11,7 @@ import gphhucarp.representation.Solution;
 import gphhucarp.representation.route.NodeSeqRoute;
 import gphhucarp.representation.route.TaskSeqRoute;
 import gputils.ManualRuns.ManualRun;
-import gputils.ManualRuns.ManualRun_VE;
+import gputils.ManualRuns.ManualRun_ME;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class CollaborativeEvaluationModel extends EvaluationModel {
                     double normObjValue =
                             solution.objValue(objective);
 
-                    if(ManualRun_VE.isManualRun)
+                    if(ManualRun_ME.isManualRun)
                         System.out.println("\t\tFitness " + j + ": " + normObjValue);
 
                     fitnesses[j] += normObjValue;

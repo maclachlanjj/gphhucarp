@@ -4,8 +4,10 @@ import gphhucarp.core.Instance;
 import gphhucarp.decisionprocess.DecisionProcess;
 import gphhucarp.decisionprocess.DecisionProcessEvent;
 import gphhucarp.decisionprocess.DecisionProcessState;
-import gphhucarp.decisionprocess.RoutingPolicy;
 import gphhucarp.representation.route.NodeSeqRoute;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Made simply to represent when a vehicle is staying at the depot
@@ -25,6 +27,6 @@ public class StaticEvent extends ReactiveEvent {
         DecisionProcessState state = decisionProcess.getState();
         Instance instance = state.getInstance();
 
-        route.setNextTask(instance.getDepotLoop());
+        route.setNextTaskChain(Stream.of(instance.getDepotLoop()).collect(Collectors.toList()));
     }
 }
