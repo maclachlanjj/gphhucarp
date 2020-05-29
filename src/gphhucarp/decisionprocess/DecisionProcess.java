@@ -179,11 +179,10 @@ public abstract class DecisionProcess {
         DecisionProcess[] res = new DecisionProcess[numClones];
 
         for(int i = 0; i < numClones; i++){
-            int run = (base == -1) ? -1 : (i % base);
-
+            int run = i % base;
             long newSeedBase = state.getSeed() + run + 1024; // 1024 to step off zero
 
-            DecisionProcessState state_clone = state.deepClone(rds, newSeedBase);
+            DecisionProcessState state_clone = state.deepClone(rds, (base == -1) ? -1 : newSeedBase);
 //            GPTree tree_clone = (GPTree)((GPRoutingPolicy_frame) routingPolicy).getGPTrees().clone(); // copy the current routing policy (the evolved rule)
 
             GPTree[] originalTrees = ((GPRoutingPolicy_frame) routingPolicy).getGPTrees();

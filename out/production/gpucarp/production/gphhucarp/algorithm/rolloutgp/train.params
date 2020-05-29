@@ -232,7 +232,7 @@ eval.problem.tie-breaker = gphhucarp.decisionprocess.tiebreaker.ChainTieBreaker
     # if the original route's remaining capacity (ratio) is above this value, the branch to the depot is not searched.
         eval.problem.routing-policy.rollout-depotThreshold = 1
     # whether or not to skip creating n resampled clones per action, and instead create one exact clone, and use the estimated demand/deadheading values.
-        eval.problem.routing-policy.rollout-useEstimatedValues = false
+        eval.problem.routing-policy.rollout-useEstimatedValues = true
 
 eval.problem.data = gputils.DoubleData
 eval.problem.eval-model = gphhucarp.gp.evaluation.ReactiveEvaluationModel

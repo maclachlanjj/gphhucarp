@@ -87,6 +87,7 @@ public class MatrixEvaluator extends DualTree_GPRoutingPolicy {
                     if (t.a.getExpectedDemand() <= rq) {
                         subset.add(t.a);
                         taken.add(t.a);
+                        rq -= t.a.getExpectedDemand();
                     }
             }
         }
@@ -191,11 +192,11 @@ public class MatrixEvaluator extends DualTree_GPRoutingPolicy {
         updateMatrix(state.getUnassignedTasks(), dp);
 
         // why candidateSubsets.get(r)?
-//        ArrayList<Arc> pool = new ArrayList<>(candidateSubsets.get(r));
+        ArrayList<Arc> pool = new ArrayList<>(candidateSubsets.get(r));
 
         // not: state.getUnassignedTasks() + candidateSubsets.get(r)
-        ArrayList<Arc> pool = new ArrayList<>(candidateSubsets.get(r));
-        pool.addAll(state.getUnassignedTasks());
+//        ArrayList<Arc> pool = new ArrayList<>(candidateSubsets.get(r));
+//        pool.addAll(state.getUnassignedTasks());
 
         List<Arc> filteredPool = poolFilter.filter(pool, r, state);
 
